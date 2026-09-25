@@ -6,6 +6,6 @@
   "rewrites": [
     { "source": "/analytics", "destination": "/analytics/index.html" },
     { "source": "/analytics/(.*)", "destination": "/analytics/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
