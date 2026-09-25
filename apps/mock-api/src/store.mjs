@@ -18,8 +18,13 @@ export async function attachStore(snapshot) {
     console.log('[mock-api] MONGODB_URI unset — state stays in memory');
     return null;
   }
-  const client = new MongoClient(uri);
-  await client.connect();
+  const client = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
+  try {
+    await client.connect();
+  } catch (e) {
+    console.error('[mock-api] MongoDB unreachable, continuing in memory:', e.message);
+    return null;
+  }
   col = client.db(process.env.MONGODB_DB || 'mprofit').collection('app_state');
   const doc = await col.findOne({ _id: ID });
   timer = setInterval(() => { void flush(); }, 2000);
