@@ -46,6 +46,27 @@ const state = {
 const round2 = (n) => Math.round(n * 100) / 100;
 const capitalizeInitials = (s) => s.trim().split(/\s+/).map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(' ');
 const parseCookies = (h = '') => Object.fromEntries(h.split(';').map((c) => c.trim().split('=')).filter((p) => p[0]));
+const SESSION_SECRET = process.env.SESSION_SECRET || 'mprofit-replica-session';
+function writeSession(userId) {
+  const payload = Buffer.from(JSON.stringify({ userId, exp: Date.now() + 1000 * 60 * 60 * 12 })).toString('base64url');
+  const sig = crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('base64url');
+  return `${payload}.${sig}`;
+}
+function readSession(token) {
+  if (!token || !token.includes('.')) return sessions.get(token) || null;
+  const [payload, sig] = token.split('.');
+  const expected = crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('base64url');
+  const a = Buffer.from(sig);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  try {
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
+    if (!data.userId || data.exp < Date.now()) return null;
+    return { userId: data.userId, createdAt: Date.now(), lastSeen: Date.now() };
+  } catch {
+    return null;
+  }
+}
 const json = (res, status, body, headers = {}) => {
   res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', ...headers });
   res.end(body === undefined ? '' : JSON.stringify(body));
@@ -177,8 +198,7 @@ route('POST', '/api/Auth/Login', async (ctx) => {
   const { email = '', password = '' } = ctx.body;
   const u = users.find((x) => x.email.toLowerCase() === email.trim().toLowerCase() && x.password === password);
   if (!u) return json(ctx.res, 401, { message: 'Invalid email or password' });
-  const sid = crypto.randomBytes(16).toString('hex');
-  sessions.set(sid, { userId: u.id, createdAt: Date.now(), lastSeen: Date.now() });
+  const sid = writeSession(u.id);
   json(ctx.res, 200, { user: publicUser(u), databases }, { 'Set-Cookie': `${COOKIE}=${sid}; Path=/; HttpOnly; SameSite=Lax${cookieFlags()}` });
 }, { auth: false });
 route('POST', '/api/Auth/Logout', (ctx) => { sessions.delete(ctx.sid); json(ctx.res, 204, undefined, { 'Set-Cookie': `${COOKIE}=; Path=/; Max-Age=0` }); }, { auth: false });
@@ -416,7 +436,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, { 'Access-Control-Allow-Origin': req.headers.origin || '*', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS' }); return res.end(); }
   if (req.headers.origin) { res.setHeader('Access-Control-Allow-Origin', req.headers.origin); res.setHeader('Access-Control-Allow-Credentials', 'true'); }
   const sid = parseCookies(req.headers.cookie)[COOKIE];
-  const session = sid ? sessions.get(sid) : null;
+  const session = readSession(sid);
   if (session) session.lastSeen = Date.now();
   const user = session ? users.find((u) => u.id === session.userId) : null;
   for (const r of routes) {

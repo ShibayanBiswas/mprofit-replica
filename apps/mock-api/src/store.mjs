@@ -18,7 +18,7 @@ export async function attachStore(snapshot) {
     console.log('[mock-api] MONGODB_URI unset — state stays in memory');
     return null;
   }
-  const client = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
+  const client = new MongoClient(uri, { serverSelectionTimeoutMS: 2500 });
   try {
     await client.connect();
   } catch (e) {
