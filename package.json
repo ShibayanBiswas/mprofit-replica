@@ -1,0 +1,21 @@
+{
+  "name": "mprofit-replica",
+  "private": true,
+  "version": "0.1.0",
+  "description": "White-label portfolio tracker replica — Classic SPA (:5173), Analytics SPA (:5174), mock API (:3001)",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:api": "npm run dev -w apps/mock-api",
+    "dev:classic": "npm run dev -w apps/classic",
+    "dev:analytics": "npm run dev -w apps/analytics",
+    "typecheck": "npm run typecheck -w apps/classic && npm run typecheck -w apps/analytics",
+    "build": "npm run build -w apps/classic && npm run build -w apps/analytics"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

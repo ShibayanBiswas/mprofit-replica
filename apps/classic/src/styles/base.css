@@ -1,0 +1,117 @@
+/* Base + auth pages. Values come from live computed styles / ui-tokens.json. */
+:root {
+  --navy: #022b54;
+  --navy-2: #043d75;
+  --navy-text: #013d79;
+  --navy-muted: #012b53;
+  --blue: #196ea4;
+  --blue-hover: #135985;
+  --blue-link: #044d96;
+  --family-bar: #e1eef2;
+  --toolbar: #f1f1f1;
+  --tab-strip: #e1eef2;
+  --tab-arrow: #bdcad2;
+  --sidebar-item: #f0f3f7;
+  --sidebar-active: #facf08;
+  --footer: #dbeaf8;
+  --panel-border: #d6d6d6;
+  --header-border: #a9a9a9;
+  --divider: #ccc;
+  --menu-divider: #e5e5e5;
+  --text: #333;
+  --text-muted: #757575;
+  --green: #60a234;
+  --red: #e33a35;
+  --white: #fff;
+  --analytics-tile: #cfe3c9;
+  --topnav-ink: #e9eaed;
+  --font: 'Source Sans Pro', 'Source Sans 3', Arial, sans-serif;
+  --font-heading: 'Poppins', 'Source Sans Pro', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+/* Live inherits Bootstrap's unitless 1.42857143, so every nested font-size scales its own leading
+   (11px->15.71, 13px->18.57, 15px->21.43, 16px->22.86). A fixed 20px here breaks all of those. */
+body { font-family: var(--font); font-size: 14px; line-height: 1.42857143; color: var(--text); background: #fff; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; cursor: pointer; }
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: 14px; }
+ul { margin: 0; padding: 0; list-style: none; }
+p { margin: 0; }
+h1, h2, h3, h4 { margin: 0; font-weight: 600; }
+.material-icons, .material-symbols-outlined { font-size: 24px; line-height: 1; vertical-align: middle; user-select: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+.boot-screen { height: 100%; background: #fff; }
+.boot-error { display: flex; align-items: center; justify-content: center; color: var(--red); font-size: 16px; }
+
+/* ---- Auth ----
+   Geometry measured from live cloud.mprofit.in: logo 250x66 @top 128, form 368 wide with a
+   70px gap, .form-group blocks 20px apart, inputs 368x49 r8, LOGIN 368x46.9 r8. */
+.auth-page { min-height: 100%; background: var(--navy); display: flex; flex-direction: column; align-items: center; padding-top: 128px; }
+.brand-login { width: 250px; height: 66px; display: block; }
+.auth-form { width: 368px; margin-top: 70px; }
+/* flow-root so the submit button's 10px top margin stays inside the group, as it does on live. */
+.form-group-auth { display: flow-root; margin-bottom: 20px; }
+.auth-label { display: block; color: rgba(255,255,255,0.863); font-size: 15px; line-height: 21.4286px; font-weight: 400; margin: 0 0 10px; }
+.auth-input-wrap { position: relative; }
+.auth-input { display: block; width: 368px; height: 49px; border: 1px solid #ccc; border-radius: 8px; padding: 6px 12px; font-size: 14px; line-height: 20px; color: #000; background: #fff; outline: none; box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); }
+.auth-input.has-eye { padding-right: 55px; }
+.auth-input::placeholder { color: #999; }
+.auth-input:focus { border-color: var(--blue); }
+.auth-eye { position: absolute; right: 16px; top: 13px; width: 24px; height: 24px; border: 0; background: transparent; color: #666; font-size: 15px; }
+.auth-submit { display: block; width: 368px; height: 46.86px; margin-top: 10px; border: 1px solid var(--blue); border-radius: 8px; background: var(--blue); color: #f7f7f7; font-size: 16px; line-height: 22.8571px; font-weight: 400; padding: 11px 12px; text-transform: uppercase; box-shadow: 0 1px 1px #000; }
+.auth-submit:hover { background: var(--blue-hover); border-color: var(--blue-hover); }
+.auth-submit:disabled { opacity: 0.7; cursor: default; }
+.auth-link { color: rgba(255,255,255,0.85); font-size: 14px; line-height: 20px; font-weight: 600; }
+.auth-link-btn { background: none; border: 0; padding: 0; }
+.auth-link:hover { text-decoration: underline; }
+.auth-error { color: #ffb4b0; font-size: 13px; line-height: 20px; margin-bottom: 10px; }
+.auth-info { color: #fff; font-size: 13px; line-height: 20px; margin-bottom: 10px; }
+
+/* ---- Generic buttons ----
+   Live common-form-modal buttons: 47px tall, 0 40px padding, 2px border, 18px/25.71 w400. */
+.btn { display: inline-flex; align-items: center; justify-content: center; height: 47px; padding: 0 40px; border-radius: 4px; font-size: 18px; line-height: 25.7143px; font-weight: 400; border: 2px solid transparent; white-space: nowrap; }
+.btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.btn-primary:hover { background: var(--blue-hover); border-color: var(--blue-hover); }
+/* Live's disabled primary is a light grey plate with grey ink, not a solid grey fill. */
+.btn-primary:disabled { background: #f1f1f1; border-color: #f1f1f1; color: #c6c6c6; cursor: default; }
+.btn-ghost { background: #fff; color: #474747; border-color: #e4e4e4; }
+.btn-ghost:hover { background: #f5f5f5; }
+.btn-sm { height: 32px; padding: 0 20px; font-size: 14px; }
+.btn-xs { height: 24px; padding: 0 10px; font-size: 12px; font-weight: 600; }
+.btn-navy { background: var(--navy-2); color: #fff; border-color: var(--navy-2); }
+.btn-navy:hover { background: #11589e; border-color: #11589e; }
+
+/* ---- Bootstrap-ish caret ---- */
+.caret { display: inline-block; width: 0; height: 0; margin-left: 2px; vertical-align: middle; border-top: 4px dashed; border-right: 4px solid transparent; border-left: 4px solid transparent; }
+
+/* ---- Tip badge ---- */
+.tip { display: inline-block; width: 13px; height: 13px; border-radius: 13px; background: #ccd5de; color: var(--navy-2); font-size: 8px; line-height: 13px; text-align: center; font-weight: 700; vertical-align: middle; margin-left: 5px; cursor: help; }
+
+/* ---- Form controls used inside overlays ---- */
+.form-row { display: flex; align-items: center; min-height: 40px; margin-bottom: 10px; }
+.form-label { width: 150px; flex: none; color: var(--navy); font-size: 16px; }
+.form-control { flex: 1; height: 36px; border: 1px solid #c5d3e4; border-radius: 4px; padding: 0 12px; font-size: 14px; color: var(--text); outline: none; background: #fff; }
+.form-control:focus { border-color: var(--blue); }
+.form-select { appearance: none; background-image: url('/assets/icons/chrome-ui/angle-down.png'); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px; padding-right: 32px; }
+.radio-group { display: flex; gap: 40px; }
+.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: var(--text); }
+.radio input { width: 16px; height: 16px; accent-color: var(--blue); margin: 0; }
+.checkbox { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.checkbox input { width: 16px; height: 16px; accent-color: var(--navy-2); margin: 0; }
+.switch { position: relative; display: inline-block; width: 23px; height: 10px; vertical-align: middle; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider { position: absolute; inset: 0; background: #e1ebf7; border-radius: 34px; transition: .4s; cursor: pointer; }
+.switch .slider::before { content: ''; position: absolute; height: 13px; width: 13px; left: -1px; bottom: -1px; background: #fff; border: 1px solid #c5d3e4; border-radius: 50%; box-shadow: 0 1px 1px rgba(0,0,0,.21); transition: .4s; }
+.switch input:checked + .slider { background: var(--navy-2); }
+.switch input:checked + .slider::before { transform: translateX(13px); }
+
+/* ---- Data tables in overlays ---- */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; font-size: 12px; font-weight: 600; color: #9da8b5; padding: 10px 12px; border-bottom: 1px solid #e5e5e5; text-transform: none; }
+.data-table td { padding: 12px; font-size: 14px; color: var(--navy); border-bottom: 1px solid #f0f0f0; height: 50px; }
+.data-table tbody tr:nth-child(odd) { background: #fff; }
+.data-table tbody tr:hover { background: #f7f9fb; }
+.empty-hint { padding: 30px 0; color: var(--text-muted); font-size: 14px; }

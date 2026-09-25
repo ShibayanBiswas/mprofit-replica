@@ -1,0 +1,239 @@
+/* Classic shell chrome: topnav (40) → family bar (56) → nav row (41) → sidebar 185 + panel. Geometry measured live at 1440px. */
+.shell { height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+
+/* ---- Top nav ---- */
+.topnav { height: 40px; flex: none; background: var(--navy); display: flex; align-items: center; padding-left: 20px; position: relative; z-index: 300; }
+.brand-shell { height: 25px; width: auto; display: block; margin-top: 1px; }
+.topnav-right { margin-left: auto; display: flex; align-items: center; height: 40px; }
+.topnav-item { font-size: 14px; font-weight: 300; color: var(--topnav-ink); margin-right: 20px; height: 20px; line-height: 20px; display: inline-flex; align-items: center; cursor: pointer; background: transparent; border: 0; padding: 0; position: relative; }
+.topnav-item:hover { color: #fff; }
+.topnav-item .caret { margin-left: 5px; }
+.topnav-item.has-badge { padding-right: 0; }
+.topnav-new-badge { position: absolute; right: -14px; top: -4px; width: 22px; height: 16px; pointer-events: none; }
+.topnav-gift svg, .topnav-gift i { font-size: 19px; }
+.topnav-user { height: 40px; padding: 0 20px 0 10px; margin-right: 0; }
+.topnav-user .fa-user-circle, .topnav-user .fa-user { font-size: 19px; margin-right: 8px; }
+.topnav .dd-menu { top: 32px; }
+.topnav .dd-menu.user-menu { top: 42px; width: 166px; }
+.topnav .dd-menu.api-menu { width: 160px; }
+.topnav .dd-menu.tools-menu { width: 202px; }
+
+/* Dropdown menus (Bootstrap 3 look) */
+.dd { position: relative; display: inline-block; }
+.dd-trigger { display: inline-flex; align-items: center; height: 100%; }
+.dd-menu { position: absolute; z-index: 1000; min-width: 160px; background: #fff; border: 0; border-radius: 0; box-shadow: 0 6px 32px -9px rgba(0,0,0,0.36); padding: 10px 0; text-align: left; font-size: 14px; }
+.dd-left { left: 0; }
+.dd-right { right: 0; }
+.dd-menu li > a { display: flex; align-items: center; justify-content: space-between; height: 30px; padding: 0 17px 0 18px; color: var(--navy-text); font-size: 13px; font-weight: 400; white-space: nowrap; line-height: 20px; }
+.dd-menu li > a:hover { background: #f5f5f5; text-decoration: none; }
+.dd-menu li.no-hover > a, .dd-static { color: var(--navy-text); font-size: 13px; padding: 0 18px; height: 30px; line-height: 30px; cursor: default; white-space: nowrap; }
+.dd-menu li.no-hover > a:hover { background: transparent; }
+.dd-divider { height: 1px; margin: 9px 0; background: var(--menu-divider); }
+.dd-menu img.broker-mini { width: 20px; height: auto; }
+
+/* ---- Family bar ---- */
+/* Live pads the bar 0 20px and then pulls its family dropdown back with a -15px margin, landing the
+   button at x=5. The 5px left pad here reaches the same pixels without the negative-margin dance. */
+.family-bar { height: 56px; flex: none; background: var(--family-bar); border-bottom: 1px solid var(--panel-border); display: flex; align-items: center; padding: 0 20px 0 5px; position: relative; z-index: 250; }
+.family-btn { display: inline-flex; align-items: center; height: 50px; background: transparent; border: 0; padding: 5px 6px 5px 17px; font-size: 20px; line-height: 40px; font-weight: 600; color: var(--navy-text); font-family: var(--font); }
+.family-btn .caret { border-top-width: 7px; border-right-width: 7px; border-left-width: 7px; margin-left: 7px; color: var(--navy-text); }
+.family-dd .dd-menu { left: -10px; top: 40px; width: 350px; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 260; }
+.family-dd .dd-menu.dd-left { left: -10px; }
+.fam-edit-row { display: flex; align-items: center; height: 40px; padding: 0 15px; gap: 15px; }
+.fam-edit-btn { font-weight: 400; color: var(--navy); cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; }
+.fam-edit-btn:hover { color: var(--blue); }
+.fam-edit-btn .fa-pencil-alt { font-size: 11px; margin-right: 6px; }
+.fam-add-icon { background: var(--navy-2); width: 14px; height: 14px; border-radius: 14px; color: #fff; font-size: 14px; line-height: 14px; text-align: center; display: inline-block; margin-right: 5px; }
+.fam-search { padding: 0 15px 10px; }
+.fam-search input { width: 100%; height: 36px; border: 1px solid #ccc; border-radius: 5px; padding: 0 12px 0 44px; background: #fff url('/assets/icons/chrome-ui/search-icon.svg') no-repeat 10px center; font-size: 13px; outline: none; }
+.fam-tabs { background: #f9f9f9; }
+.fam-tab-heading { display: flex; justify-content: space-between; align-items: center; height: 28px; padding: 0 15px; }
+.famtab-item { font-size: 11px; font-weight: 700; color: #688797; cursor: pointer; letter-spacing: 0.2px; }
+.famtab-item.active { color: var(--navy); }
+.famtab-table { width: 100%; border-collapse: collapse; }
+.famtab-table thead td { padding: 6px 15px; font-size: 12px; color: #999; }
+.famtab-table thead td:last-child, .famtab-table tbody td:last-child { text-align: right; }
+.famtab-table tbody tr { cursor: pointer; }
+.famtab-table tbody tr:hover { background: #eef2f6; }
+.famtab-table tbody td { padding: 8px 15px; font-size: 12px; color: var(--navy); border-top: 1px solid #eee; }
+.famtab-scroll { max-height: 220px; overflow: auto; }
+
+.search-bar { margin-left: auto; position: relative; width: 364px; }
+.port-search-input { width: 364px; height: 36px; border: 1px solid #ccc; border-radius: 5px; padding: 0 34px 0 44px; font-size: 14px; line-height: 20px; color: var(--text); background: #fff url('/assets/icons/chrome-ui/search-icon.svg') no-repeat 10px center; outline: none; position: relative; z-index: 201; }
+.port-search-res { position: absolute; z-index: 200; top: -10px; left: -15px; right: -15px; background: #fff; border-radius: 0 0 3px 3px; padding-top: 55px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); }
+.port-search-tabs { display: flex; align-items: center; height: 34px; background: #f9f9f9; padding: 0 20px; gap: 0; }
+.port-search-tabs .famtab-item { margin-left: 40px; }
+.port-search-tabs .famtab-item:first-child { margin-left: 0; }
+.port-row { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.port-row th { padding: 8px 20px; text-align: left; font-size: 13px; font-weight: 600; color: var(--blue); }
+.port-row th:last-child, .port-row td:last-child { text-align: right; }
+.port-row td { padding: 12px 20px; font-size: 13px; color: var(--navy-muted); border-top: 1px solid #ddd; height: 41px; }
+.port-row tbody tr { cursor: pointer; }
+.port-row tbody tr:hover { background: #f5f8fb; }
+.port-row .material-icons { font-size: 13px; margin-right: 4px; color: var(--navy-text); }
+.port-search-container { padding-bottom: 10px; }
+
+/* ---- Nav row (sidebar head + toolbar) ---- */
+.nav-row { height: 41px; flex: none; display: flex; }
+.nav-row-left { width: 185px; flex: none; background: var(--toolbar); display: flex; align-items: center; padding-right: 20px; }
+.sidebar-toggle { width: 53px; padding: 0 0 0 20px; color: var(--navy); cursor: pointer; display: inline-flex; align-items: center; height: 41px; }
+.sidebar-toggle svg, .sidebar-toggle i { font-size: 14px; }
+.cloud-tabs { display: flex; align-items: center; gap: 19px; padding: 0; }
+.cloud-tabs li { height: 26px; padding: 3px 12px; border-radius: 4px; box-shadow: 0 0 7px #d3d3d3; background: #f9f9f9; cursor: pointer; line-height: 20px; }
+.cloud-tabs li a { color: var(--navy); font-size: 14px; }
+.cloud-tabs li.active { background: var(--navy); }
+.cloud-tabs li.active a { color: #fff; }
+.toolbar { flex: 1; background: var(--toolbar); display: flex; align-items: center; padding: 0 20px; }
+.analytics-summary-btn { background: var(--analytics-tile); border: 0; border-radius: 4px; padding: 8px; margin-right: 12px; line-height: 0; }
+.analytics-summary-btn img { width: 16px; height: 16px; display: block; }
+.toolbar-port-label { font-size: 14px; color: var(--navy-muted); }
+.toolbar-port-label .port { font-weight: 600; margin-left: 4px; }
+.toolbar-actions { margin-left: auto; display: flex; align-items: center; }
+.action-btn { background: transparent; border: 0; padding: 0 0 0 12px; color: var(--navy-muted); font-size: 14px; line-height: 20px; height: 20px; display: inline-flex; align-items: center; }
+.action-btn:hover { color: var(--blue); }
+.action-btn .fa-search { font-size: 15px; }
+.action-btn .caret { margin-left: 2px; }
+.btn-add-icon { background: var(--navy-2); color: #fff; width: 20px; height: 20px; border-radius: 20px; font-size: 20px; line-height: 20px; text-align: center; display: inline-block; margin-right: 5px; }
+.analytics-cta-btn { background: var(--analytics-tile); border: 0; border-radius: 4px; padding: 5px; margin-left: 12px; line-height: 0; }
+.analytics-cta-btn img { width: 20px; height: 20px; display: block; }
+.toolbar .dd-menu { top: 22px; min-width: 170px; border-radius: 4px; padding: 10px 0; }
+.toolbar .dd-menu li > a { height: 24px; font-size: 12px; font-weight: 600; letter-spacing: -0.35px; padding: 0 17px; }
+.toolbar .dd-menu .dd-divider { margin: 8px 0; }
+.toolbar-asset-search { position: relative; margin-left: 12px; }
+.toolbar-asset-search input { width: 220px; height: 26px; border: 1px solid #add1de; border-radius: 4px; padding: 0 10px; font-size: 13px; outline: none; }
+.analytics-preview-menu { display: flex; align-items: flex-start; padding: 9px; margin-top: 4px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.24); min-width: 0; }
+.analytics-preview-card { display: flex; flex-direction: column; align-items: center; width: 128px; cursor: pointer; }
+.analytics-preview-card .preview-img { width: 128px; height: 80px; border-radius: 4px; background: #eef4ea; display: flex; align-items: center; justify-content: center; color: var(--navy); }
+.analytics-preview-card:hover .preview-img { box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+.analytics-preview-label { margin-top: 8px; font-size: 14px; font-weight: 600; line-height: 21px; color: #010006; white-space: nowrap; }
+.analytics-preview-divider { width: 1px; height: 87px; margin: 0 14px; background: #ebecf2; flex: none; }
+
+/* ---- Body: sidebar + panel ---- */
+.shell-body { flex: 1; display: flex; min-height: 0; }
+.left-container { width: 185px; flex: none; background: #fff; border-right: 1px solid var(--panel-border); display: flex; flex-direction: column; min-height: 0; }
+.left-container.collapsed { display: none; }
+.market-update { padding: 0 20px; margin: 15px 0 10px; font-size: 14px; }
+.market-row { display: flex; justify-content: space-between; align-items: baseline; line-height: 21.4286px; }
+.market-name { font-weight: 600; color: var(--text); font-size: 13px; }
+.market-tooltip { display: inline-block; width: 11px; height: 11px; border-radius: 11px; background: #ccd5de; color: var(--navy-2); font-size: 7px; line-height: 11px; text-align: center; font-weight: 700; margin-left: 4px; vertical-align: middle; cursor: help; }
+.index-value { font-size: 14px; }
+.market-up { color: var(--green); }
+.market-down { color: var(--red); }
+.horizontal-line { height: 1px; margin: 5px 0; background: var(--divider); }
+.btn-port-filters-container { margin: 10px 20px; }
+.btn-port-filters { padding: 1px 10px; color: var(--navy); background: transparent; border: 0; font-size: 14px; display: inline-flex; align-items: center; }
+.active-port-filter-text { font-size: 16px; line-height: 22.8571px; font-weight: 600; color: var(--navy); margin-right: 10px; }
+.btn-port-filters .caret { margin-left: 2px; }
+.btn-port-filters-container .dd-menu { min-width: 128px; top: 26px; border-radius: 4px; padding: 6px 0; }
+.btn-port-filters-container .dd-menu li > a { height: 24px; font-size: 12px; padding: 0 12px; color: var(--navy); }
+.client-left-tab { padding: 10px 0 0; margin: 0 0 0 20px; overflow-y: auto; flex: 1; min-height: 0; }
+.client-left-tab::-webkit-scrollbar { width: 0; }
+.tab-c { width: 145px; height: 40px; padding: 0 10px; margin-bottom: 8px; background: var(--sidebar-item); box-shadow: 0 0 7px #d3d3d3; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+.tab-c .c-name { font-size: 13px; font-weight: 500; color: var(--navy-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab-c .port-icon { font-size: 13px; color: var(--navy-text); }
+.tab-c:hover { background: var(--navy-text); }
+.tab-c:hover .c-name, .tab-c:hover .port-icon { color: #fff; }
+.tab-c.active { background: var(--sidebar-active); }
+.tab-c.active .c-name, .tab-c.active .port-icon { color: var(--navy-text); }
+.btn-add-port { display: inline-flex; align-items: center; background: #fff; border: 0; padding: 0; margin: 10px 0 30px 10px; font-size: 12px; line-height: 17.1429px; font-weight: 600; color: var(--navy); }
+.btn-add-port .btn-add-icon { width: 24px; height: 24px; border-radius: 24px; font-size: 24px; line-height: 23px; margin-right: 0; }
+.add-port-label { font-size: 16px; line-height: 22.8571px; font-weight: 600; letter-spacing: -0.67px; color: var(--navy); margin-left: 11px; }
+.referral-container { margin-top: auto; height: 50px; flex: none; padding: 0 20px; display: flex; align-items: center; box-shadow: 0 -2px 4px rgba(0,0,0,0.08); }
+.referral-container .material-icons { font-size: 22px; color: var(--navy); margin-right: 12px; }
+.referral-text { font-size: 16px; font-weight: 600; color: var(--navy); }
+
+.middle-container { flex: 1; min-width: 0; margin-top: 8px; padding: 0 20px; display: flex; flex-direction: column; min-height: 0; }
+.middle-container-inner { flex: 1; min-height: 0; border: 1px solid var(--panel-border); border-bottom: 0; border-radius: 5px 5px 0 0; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ---- Asset nav strip ---- */
+.asset-nav-container { height: 38px; flex: none; background: var(--navy); padding-bottom: 1px; border-radius: 3px 3px 0 0; display: flex; }
+.asset-nav-button { width: 20px; flex: none; background-color: var(--tab-arrow); background-repeat: no-repeat; background-position: center; cursor: pointer; }
+.asset-nav-prev { background-image: url('/assets/icons/chrome-ui/left-slider-arrow.svg'); border-radius: 3px 0 0 0; }
+.asset-nav-next { background-image: url('/assets/icons/chrome-ui/right-slider-arrow.svg'); border-radius: 0 3px 0 0; }
+.asset-nav-scroll { flex: 1; overflow: hidden; display: flex; scroll-behavior: smooth; }
+.asset-nav-item { height: 37px; flex: none; display: flex; align-items: center; padding: 0 20px; background: var(--tab-strip); color: var(--navy); border-right: 1px solid var(--panel-border); cursor: pointer; user-select: none; }
+.asset-nav-item:hover, .asset-nav-item.active { background: var(--navy); }
+.asset-nav-item:hover .asset-type-name, .asset-nav-item.active .asset-type-name { color: #fff; }
+.asset-type-icon { width: 26px; height: 17px; border: 1px solid var(--navy); background: #fff; font-size: 11px; line-height: 15.7143px; font-weight: 600; margin-right: 15px; display: inline-flex; align-items: center; justify-content: center; color: var(--navy); }
+.asset-type-name { font-size: 13px; color: var(--navy); white-space: nowrap; }
+
+/* ---- Holdings table ---- */
+.stocks-group { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.sum-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 15px; }
+/* Live keeps four columns at fixed px (40/250/35/15) and splits the remainder in a constant ratio.
+   Verified at two widths: 1214px table -> 163/175/93/128/140/175, 1053px table -> 133.1/142.6/76/104.6/114.1/142.6. */
+.sum-table td { padding: 0; } /* drop the UA 1px cell padding; every column sets its own */
+/* Live sizes these columns with width="" attributes: 250px, 35px, 14/15/8/11/12/15%, 15px. The
+   percentages total 75% while the px columns take 340px, so table-layout:fixed scales each
+   percentage across the 873px remainder (14% -> 162.95px, 15% -> 174.6px, and so on). Expressing
+   them as plain percentages here reproduces those pixel positions exactly; an earlier
+   calc(100% - 340px) formulation was silently invalid and collapsed to six equal columns. */
+.sum-table col.c-dd { width: 40px; } .sum-table col.c-first { width: 250px; } .sum-table col.c-sort { width: 35px; } .sum-table col.c-end { width: 15px; }
+.sum-table col.c-qty { width: 14%; }
+.sum-table col.c-inv { width: 15%; }
+.sum-table col.c-price { width: 8%; }
+.sum-table col.c-today { width: 11%; }
+.sum-table col.c-unreal { width: 12%; }
+.sum-table col.c-value { width: 15%; }
+.sum-body-wrap { scrollbar-gutter: stable; }
+.stocks-group > .sum-table, .stock-total .sum-table { padding-right: 0; }
+.stock-heading { height: 50px; border-bottom: 1px solid var(--header-border); }
+.stock-heading td { text-align: right; vertical-align: middle; padding: 0 7px 0 0; }
+.stock-heading td p { color: #000; font-weight: 600; font-size: 15px; line-height: 21.4286px; cursor: pointer; }
+.stock-heading td p.text-blue { color: var(--blue-link); font-size: 13px; line-height: 18.5714px; }
+.stock-heading td.col-dropdown { text-align: center; padding: 0; color: #000; }
+.stock-heading td.col-dropdown svg, .stock-heading td.col-dropdown i { font-size: 16px; }
+.stock-heading td.col-first { text-align: left; padding: 0; }
+.asset-search-container { margin: 0; }
+.asset-search-box { width: 250px; height: 35px; border: 1px solid #add1de; border-radius: 5px; padding: 0 35px 0 45px; background: #fff url('/assets/icons/chrome-ui/search-icon.svg') no-repeat 10px center; font-size: 15px; font-weight: 400; outline: none; }
+.stock-heading td.sort-arrows { text-align: right; padding: 0 0 0 5px; }
+.sort-arrow-both { display: inline-block; width: 8px; color: #333; font-size: 10px; line-height: 6px; cursor: pointer; }
+.sum-body-wrap { flex: 1; min-height: 0; overflow-y: auto; }
+.btn-add-trans { display: inline-block; background: #fff; border: 0; padding: 0; margin: 20px 0 30px 10px; font-size: 12px; line-height: 17.1429px; font-weight: 600; color: var(--navy); text-align: center; }
+.btn-add-trans-icon { background: var(--navy-2); width: 24px; height: 24px; border-radius: 24px; color: #fff; font-size: 24px; line-height: 23px; text-align: center; display: inline-block; vertical-align: middle; }
+.add-trans-label { display: inline-block; vertical-align: middle; font-size: 16px; line-height: 22.8571px; font-weight: 600; color: var(--navy); margin-left: 11px; letter-spacing: -0.67px; }
+.stock-row { height: 50px; border-bottom: 1px solid #eee; cursor: pointer; }
+.stock-row:hover { background: #f7f9fb; }
+.stock-row td { text-align: right; padding: 0 7px 0 0; vertical-align: middle; font-size: 15px; color: var(--text); }
+.stock-row td.col-first { text-align: left; padding-left: 10px; font-weight: 600; color: var(--navy-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stock-row td.col-dropdown { text-align: center; padding: 0; }
+.stock-row td.col-dropdown .caret { display: none; }
+.stock-row:hover td.col-dropdown .caret { display: inline-block; }
+.stock-row td p.s-margin { font-size: 13px; line-height: 18.5714px; }
+.gain-pos { color: var(--green); } .gain-neg { color: var(--red); }
+.stock-total { height: 50px; flex: none; background: var(--footer); font-size: 15px; line-height: 21.4286px; font-weight: 600; box-shadow: 0 2px 7px 2px #000; position: relative; z-index: 2; }
+.stock-total table { margin: 0; }
+.stock-total td { text-align: right; vertical-align: middle; padding: 0 7px 0 0; font-size: 15px; }
+.stock-total td.col-first { text-align: left; padding: 0; }
+/* Live indents the label inside the cell, not the cell itself: p.bottam-bold.s-padd has padding-left:45px. */
+.stock-total td.col-first .bottam-bold { padding-left: 45px; font-size: 15px; line-height: 21.4286px; font-weight: 700; color: var(--text); }
+.qcircle { display: inline-block; width: 14px; height: 14px; border-radius: 14px; background: #e1e4e7; color: var(--blue); font-size: 9px; line-height: 14px; font-weight: 700; text-align: center; vertical-align: middle; margin-left: 7px; cursor: help; }
+.stock-total p.s-margin { font-size: 13px; line-height: 18.5714px; }
+.stock-total .stacked { display: inline-block; text-align: center; }
+.stock-total .stacked .top { display: block; line-height: 18.5714px; border-bottom: 1px solid #333; padding: 0 4px; }
+.stock-total .stacked .bottom { display: block; line-height: 18.5714px; font-size: 13px; }
+
+.blank-state { padding: 60px 20px; color: var(--text-muted); font-size: 15px; text-align: center; }
+
+/* ---- View All Transactions (inline panel) ---- */
+.vat { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.vat-crumbs { height: 30px; background: var(--tab-strip); display: flex; align-items: center; gap: 12px; padding: 0 20px; font-size: 12px; color: var(--navy-2); border-radius: 3px 3px 0 0; }
+.vat-back { cursor: pointer; font-weight: 600; }
+.vat-back:hover { text-decoration: underline; }
+.vat-crumb { color: var(--navy); }
+.vat-filters { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--navy); }
+.vat-filter-lbl { color: var(--text-muted); font-size: 12px; }
+.vat-select { height: 28px; font-size: 13px; width: 140px; flex: none; }
+.vat-select.wide { width: 220px; }
+.vat-export { margin-left: auto; height: 32px; }
+.vat-summary { background: var(--footer); color: var(--navy); font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 3px 3px 0 0; }
+.vat-table th { color: var(--navy); font-size: 14px; font-weight: 600; }
+.family-dd .dd-menu { top: -12px; left: -15px; min-height: 440px; }
+.famtab-table tbody td { padding: 10px 15px; }
+
+@media (max-width: 1100px) {
+  .search-bar, .port-search-input { width: 280px; }
+  .sum-table { font-size: 14px; }
+  .stock-row td, .stock-heading td p, .stock-total td { font-size: 14px; }
+  .asset-search-box { width: 200px; font-size: 14px; }
+}
