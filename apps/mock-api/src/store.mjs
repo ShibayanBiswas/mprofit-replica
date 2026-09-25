@@ -27,10 +27,12 @@ export async function attachStore(snapshot) {
   }
   col = client.db(process.env.MONGODB_DB || 'mprofit').collection('app_state');
   const doc = await col.findOne({ _id: ID });
-  timer = setInterval(() => { void flush(); }, 2000);
-  timer.unref?.();
-  const stop = () => { clearInterval(timer); return flush(); };
-  process.once('SIGTERM', () => { void stop().then(() => process.exit(0)); });
+  if (!process.env.VERCEL) {
+    timer = setInterval(() => { void flush(); }, 2000);
+    timer.unref?.();
+    const stop = () => { clearInterval(timer); return flush(); };
+    process.once('SIGTERM', () => { void stop().then(() => process.exit(0)); });
+  }
   console.log('[mock-api] MongoDB connected');
   return doc?.payload ?? null;
 }

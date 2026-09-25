@@ -13,7 +13,8 @@
     "dev:classic": "npm run dev -w apps/classic",
     "dev:analytics": "npm run dev -w apps/analytics",
     "typecheck": "npm run typecheck -w apps/classic && npm run typecheck -w apps/analytics",
-    "build": "npm run build -w apps/classic && npm run build -w apps/analytics"
+    "build": "npm run build -w apps/classic && npm run build -w apps/analytics",
+    "build:web": "npm run build -w apps/classic -- --outDir ../../dist --emptyOutDir && npm run build -w apps/analytics -- --base /analytics/ --outDir ../../dist/analytics --emptyOutDir false"
   },
   "devDependencies": {
     "typescript": "^5.6.3"

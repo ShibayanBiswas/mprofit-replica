@@ -1,0 +1,11 @@
+{
+  "framework": null,
+  "installCommand": "npm install",
+  "buildCommand": "npm run build:web",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/analytics", "destination": "/analytics/index.html" },
+    { "source": "/analytics/(.*)", "destination": "/analytics/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

@@ -1,6 +1,7 @@
 // Dependency-free mock API. Cookie session, JSON routes under /api/*. Port 3001.
 import http from 'node:http';
 import crypto from 'node:crypto';
+import { pathToFileURL } from 'node:url';
 import { users, databases, accessUsers } from './seed/users.mjs';
 import { families, portfolios, assetClasses, holdings, indices, analyticsIndices, benchmarks, watchlist, categoryOf, indexCatalog, defaultSelectedIndices, benchmarkSettings, reportStudioViews, customCategoryRows, categoryMaster } from './seed/portfolios.mjs';
 import { reportsCatalog, reportJobs } from './seed/reports.mjs';
@@ -425,7 +426,10 @@ const server = http.createServer(async (req, res) => {
     const body = ['POST', 'PUT'].includes(req.method) ? await readBody(req) : {};
     try {
       const out = await r.handler({ req, res, params: m.groups || {}, query: url.searchParams, body, user, sid });
-      if (req.method !== 'GET' && req.method !== 'OPTIONS') markDirty();
+      if (req.method !== 'GET' && req.method !== 'OPTIONS') {
+        markDirty();
+        if (process.env.VERCEL) await flush();
+      }
       return out;
     }
     catch (e) { console.error(e); return json(res, 500, { message: 'Internal error' }); }
@@ -481,9 +485,21 @@ function applyPayload(payload) {
   }
 }
 
-const payload = await attachStore(snapshot);
-if (payload) applyPayload(payload);
-else markDirty();
-await flush();
+export async function ready() {
+  if (ready.done) return;
+  ready.done = (async () => {
+    const payload = await attachStore(snapshot);
+    if (payload) applyPayload(payload);
+    else markDirty();
+    await flush();
+  })();
+  return ready.done;
+}
 
-server.listen(PORT, '0.0.0.0', () => console.log(`[mock-api] listening on 0.0.0.0:${PORT}`));
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
+  await ready();
+  server.listen(PORT, '0.0.0.0', () => console.log(`[mock-api] listening on 0.0.0.0:${PORT}`));
+}
+
+export { server };

@@ -9,5 +9,5 @@ export const AUTO_IMPORT_EMAIL = 'shibayanbiswas@rathi.com';
 
 const host = typeof location !== 'undefined' ? location.hostname : '';
 const local = host === 'localhost' || host === '127.0.0.1' || host === '';
-export const CLASSIC_URL = local ? 'http://localhost:5173' : 'https://mprofit-classic-shibayan-biswas-projects.vercel.app';
-export const ANALYTICS_URL = local ? 'http://localhost:5174' : 'https://mprofit-analytics-shibayan-biswas-projects.vercel.app';
+export const CLASSIC_URL = local ? 'http://localhost:5173' : '';
+export const ANALYTICS_URL = local ? 'http://localhost:5174' : '/analytics';
