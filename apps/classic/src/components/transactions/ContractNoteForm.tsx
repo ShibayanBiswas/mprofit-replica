@@ -29,7 +29,7 @@ export function ContractNoteForm() {
   const [saving, setSaving] = useState(false);
 
   const back = () => navigate(portfolioPath(dbId, family?.id ?? '-', portfolio?.id ?? '-'));
-  const stockLike = assetCode === 'EQ' || assetCode === 'SFO' || assetCode === 'OFO';
+  const stockLike = assetCode === 'EQ' || assetCode === 'BND' || assetCode === 'SFO' || assetCode === 'OFO';
 
   const total = useMemo(() => {
     const buy = buys.reduce((s, l) => s + num(l.qty) * num(l.price) + num(l.brokerage), 0);
@@ -57,7 +57,7 @@ export function ContractNoteForm() {
   };
 
   if (!stockLike) {
-    return <SimpleBuySell assetCode={assetCode} label={cls?.label ?? assetCode} portfolioId={portfolio?.id} onBack={back} onSaved={async () => { await reloadSummary(); back(); }} />;
+    return <AssetTransactionForm assetCode={assetCode} label={cls?.label ?? assetCode} portfolioId={portfolio?.id} onBack={back} onSaved={async () => { await reloadSummary(); back(); }} />;
   }
 
   return (
@@ -139,26 +139,233 @@ export function ContractNoteForm() {
   );
 }
 
-function SimpleBuySell({ assetCode, label, portfolioId, onBack, onSaved }: { assetCode: string; label: string; portfolioId?: string; onBack: () => void; onSaved: () => Promise<void> }) {
-  const nameLabel = assetCode.startsWith('MF') ? 'Fund Name' : assetCode === 'FD' ? 'Deposit Name' : 'Asset Name';
-  const priceLabel = assetCode.startsWith('MF') ? 'NAV' : 'Price';
-  const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
-  const [date, setDate] = useState('');
-  const [name, setName] = useState('');
-  const [qty, setQty] = useState('0');
-  const [price, setPrice] = useState('0.00');
-  const [stamp, setStamp] = useState('0.00');
+type TxField =
+  | { k: 'select'; label: string; key: string; options: string[] }
+  | { k: 'text'; label: string; key: string }
+  | { k: 'date'; label: string; key: string }
+  | { k: 'money'; label: string; key: string }
+  | { k: 'show'; label: string; value: string }
+  | { k: 'head'; label: string };
+
+const BUY_SELL = ['Buy', 'Sell'];
+const INTEREST_TYPE = ['Cumulative', 'Payout'];
+const INTEREST_PAY = ['Monthly', 'Quarterly', 'Half-yearly', 'Yearly'];
+const PREMIUM_MODE = ['Monthly', 'Quarterly', 'Half-yearly', 'Yearly'];
+
+function formSpec(code: string, label: string, values: Record<string, string>): { title: string; fields: TxField[] } {
+  const qty = Number(values.qty) || 0;
+  const rate = Number(values.rate) || 0;
+  const stamp = Number(values.stamp) || 0;
+  const amount = qty * rate;
+  const mf = code === 'MFEQ' || code === 'MFDT' || code === 'SIF';
+  if (mf) {
+    return {
+      title: code === 'SIF' ? 'SIF - Buy/Sell' : 'Mutual Funds - Buy/Sell',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'text', label: 'Fund Name', key: 'name' },
+        { k: 'money', label: 'Quantity', key: 'qty' },
+        { k: 'money', label: 'NAV', key: 'rate' },
+        { k: 'show', label: 'Net Amount', value: money(amount) },
+        { k: 'money', label: 'Stamp Charges', key: 'stamp' },
+        { k: 'show', label: 'Gross Amount', value: money(amount + stamp) },
+      ],
+    };
+  }
+  if (code === 'BNK') {
+    return {
+      title: 'Banks - Account Transactions',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: ['Deposit', 'Withdrawal'] },
+        { k: 'text', label: 'Bank Account', key: 'name' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Amount', key: 'rate' },
+        { k: 'text', label: 'Cheque / Ref #', key: 'ref' },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'INS' || code === 'ULP') {
+    return {
+      title: label,
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: ['New Policy', 'Premium', 'Withdrawal'] },
+        { k: 'text', label: 'Plan / Scheme', key: 'name' },
+        { k: 'money', label: 'First Premium', key: 'rate' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'text', label: 'Insured Name', key: 'insured' },
+        { k: 'text', label: 'Nominee', key: 'nominee' },
+        { k: 'money', label: 'Sum Assured', key: 'sum' },
+        { k: 'text', label: 'Narration', key: 'note' },
+        { k: 'head', label: 'Policy Details' },
+        { k: 'select', label: 'Premium Mode', key: 'mode', options: PREMIUM_MODE },
+        { k: 'date', label: 'Next Premium Due', key: 'due' },
+        { k: 'money', label: 'Next Premium Amt', key: 'dueAmt' },
+        { k: 'text', label: 'Term (yrs)', key: 'term' },
+        { k: 'date', label: 'Maturity Date', key: 'maturity' },
+        { k: 'text', label: 'Premium Term (yrs)', key: 'premTerm' },
+        { k: 'text', label: 'Lock-in Period', key: 'lock' },
+      ],
+    };
+  }
+  if (code === 'GLD' || code === 'SLV') {
+    const kg = code === 'SLV';
+    return {
+      title: `${label} - Buy / Sell`,
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
+        { k: 'text', label: 'Lot Description', key: 'name' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: kg ? 'Quantity (kgs)' : 'Quantity (gms)', key: 'qty' },
+        { k: 'money', label: kg ? 'Rate per kg' : 'Rate per gm', key: 'rate' },
+        { k: 'show', label: 'Amount', value: money(amount) },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'PR') {
+    return {
+      title: 'Property - Buy / Sell',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
+        { k: 'text', label: 'Property Name', key: 'name' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'text', label: 'Area', key: 'qty' },
+        { k: 'money', label: 'Rate/Unit area', key: 'rate' },
+        { k: 'show', label: 'Amount', value: money(amount) },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'JWL' || code === 'ART') {
+    return {
+      title: `${label} - Buy / Sell`,
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
+        { k: 'text', label: 'Title', key: 'name' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Amount', key: 'rate' },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'PE') {
+    return {
+      title: 'Private Equity - Buy / Sell',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
+        { k: 'text', label: 'Asset Name', key: 'name' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Quantity', key: 'qty' },
+        { k: 'money', label: 'Rate', key: 'rate' },
+        { k: 'show', label: 'Amount', value: money(amount) },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'AIF') {
+    return {
+      title: 'AIF',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: ['Investment', 'Redemption'] },
+        { k: 'text', label: 'Asset Name', key: 'name' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Quantity', key: 'qty' },
+        { k: 'money', label: 'Rate', key: 'rate' },
+        { k: 'show', label: 'Net Amount', value: money(amount) },
+        { k: 'money', label: 'Setup Fees / Stamp Duty', key: 'stamp' },
+        { k: 'show', label: 'Gross Amount', value: money(amount + stamp) },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'NCD') {
+    return {
+      title: 'NCD/Debentures',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
+        { k: 'text', label: 'Asset Name', key: 'name' },
+        { k: 'money', label: 'Interest Rate', key: 'interest' },
+        { k: 'select', label: 'Interest Type', key: 'interestType', options: INTEREST_TYPE },
+        { k: 'select', label: 'Interest Payment', key: 'interestPay', options: INTEREST_PAY },
+        { k: 'date', label: 'Maturity Date', key: 'maturity' },
+        { k: 'text', label: 'Lock-in Period', key: 'lock' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Quantity', key: 'qty' },
+        { k: 'money', label: 'Rate', key: 'rate' },
+        { k: 'money', label: 'Face Value', key: 'face' },
+        { k: 'show', label: 'Amount', value: money(amount) },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'LN') {
+    return {
+      title: 'Loans',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: ['Borrow', 'Repayment'] },
+        { k: 'text', label: 'Asset Name', key: 'name' },
+        { k: 'money', label: 'Interest Rate', key: 'interest' },
+        { k: 'select', label: 'Interest Type', key: 'interestType', options: INTEREST_TYPE },
+        { k: 'select', label: 'Interest Payment', key: 'interestPay', options: INTEREST_PAY },
+        { k: 'date', label: 'Maturity Date', key: 'maturity' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Amount', key: 'rate' },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  if (code === 'PPF') {
+    return {
+      title: 'PPF/EPF',
+      fields: [
+        { k: 'select', label: 'Trans. Type', key: 'type', options: ['Investment', 'Withdrawal'] },
+        { k: 'text', label: 'Asset Name', key: 'name' },
+        { k: 'money', label: 'Interest Rate', key: 'interest' },
+        { k: 'date', label: 'Maturity Date', key: 'maturity' },
+        { k: 'text', label: 'Lock-in Period', key: 'lock' },
+        { k: 'date', label: 'Date', key: 'date' },
+        { k: 'money', label: 'Amount', key: 'rate' },
+        { k: 'text', label: 'Narration', key: 'note' },
+      ],
+    };
+  }
+  return {
+    title: label,
+    fields: [
+      { k: 'select', label: 'Trans. Type', key: 'type', options: ['Investment', 'Withdrawal'] },
+      { k: 'text', label: 'Asset Name', key: 'name' },
+      { k: 'money', label: 'Interest Rate', key: 'interest' },
+      { k: 'select', label: 'Interest Type', key: 'interestType', options: INTEREST_TYPE },
+      { k: 'select', label: 'Interest Payment', key: 'interestPay', options: INTEREST_PAY },
+      { k: 'date', label: 'Maturity Date', key: 'maturity' },
+      { k: 'text', label: 'Lock-in Period', key: 'lock' },
+      { k: 'date', label: 'Date', key: 'date' },
+      { k: 'money', label: 'Amount', key: 'rate' },
+      { k: 'text', label: 'Narration', key: 'note' },
+    ],
+  };
+}
+
+function AssetTransactionForm({ assetCode, label, portfolioId, onBack, onSaved }: { assetCode: string; label: string; portfolioId?: string; onBack: () => void; onSaved: () => Promise<void> }) {
+  const [values, setValues] = useState<Record<string, string>>({ type: '', qty: '0', rate: '0.00', stamp: '0.00' });
   const [saving, setSaving] = useState(false);
-  const net = (Number(qty) || 0) * (Number(price) || 0);
-  const gross = net + (Number(stamp) || 0);
+  const spec = formSpec(assetCode, label, values);
+  const set = (key: string, value: string) => setValues((v) => ({ ...v, [key]: value }));
 
   const save = async () => {
-    if (!portfolioId || !name.trim()) return;
+    if (!portfolioId || !(values.name || '').trim()) return;
     setSaving(true);
     try {
+      const qty = Number(values.qty) || 0;
+      const rate = Number(values.rate) || 0;
+      const typeField = spec.fields.find((f) => f.k === 'select' && f.key === 'type');
+      const type = values.type || (typeField?.k === 'select' ? typeField.options[0] : 'Buy');
       await classicApi.addTransaction(portfolioId, {
-        assetType: label, type, assetName: name, date: date || new Date().toISOString().slice(0, 10),
-        quantity: Number(qty) || 0, rate: Number(price) || 0, amount: net,
+        assetType: label, type,
+        assetName: values.name, date: values.date || new Date().toISOString().slice(0, 10),
+        quantity: qty, rate, amount: qty ? qty * rate : rate,
       });
       await onSaved();
     } finally { setSaving(false); }
@@ -175,18 +382,26 @@ function SimpleBuySell({ assetCode, label, portfolioId, onBack, onSaved }: { ass
         </div>
       </div>
       <div className="cn-scroll">
-        <div className="cn-padding" style={{ maxWidth: 640 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 16 }}>{label} - Buy/Sell</h2>
-          <div className="cn-item-container"><span className="cn-item-lbl">Trans. Type</span>
-            <select className="form-date-dropdown" style={{ width: 210 }} value={type} onChange={(e) => setType(e.target.value as 'Buy' | 'Sell')}><option>Buy</option><option>Sell</option></select>
-          </div>
-          <div className="cn-item-container"><span className="cn-item-lbl">Date</span><input className="form-date-dropdown" style={{ width: 210 }} type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
-          <div className="cn-item-container"><span className="cn-item-lbl">{nameLabel}</span><input className="mpr-input" style={{ width: 325 }} value={name} onChange={(e) => setName(e.target.value)} /></div>
-          <div className="cn-item-container"><span className="cn-item-lbl">Quantity</span><input className="mpr-input right" style={{ width: 160 }} value={qty} onChange={(e) => setQty(e.target.value)} /></div>
-          <div className="cn-item-container"><span className="cn-item-lbl">{priceLabel}</span><input className="mpr-input right" style={{ width: 160 }} value={price} onChange={(e) => setPrice(e.target.value)} /></div>
-          <div className="cn-item-container"><span className="cn-item-lbl">Net Amount</span><span className="cn-total-value">{money(net)}</span></div>
-          <div className="cn-item-container"><span className="cn-item-lbl">Stamp Charges</span><input className="mpr-input right" style={{ width: 160 }} value={stamp} onChange={(e) => setStamp(e.target.value)} /></div>
-          <div className="cn-item-container"><span className="cn-item-lbl">Gross Amount</span><span className="cn-total-value">{money(gross)}</span></div>
+        <div className="cn-padding" style={{ maxWidth: 720 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 16 }}>{spec.title}</h2>
+          {spec.fields.map((field) => {
+            if (field.k === 'head') return <h3 key={field.label} style={{ fontSize: 16, fontWeight: 600, margin: '18px 0 8px' }}>{field.label}</h3>;
+            if (field.k === 'show') return <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span><span className="cn-total-value">{field.value}</span></div>;
+            if (field.k === 'select') {
+              const value = values[field.key] || field.options[0];
+              return (
+                <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span>
+                  <select className="form-date-dropdown" style={{ width: 220 }} value={value} onChange={(e) => set(field.key, e.target.value)}>{field.options.map((o) => <option key={o}>{o}</option>)}</select>
+                </div>
+              );
+            }
+            if (field.k === 'date') return <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span><input className="form-date-dropdown" style={{ width: 210 }} type="date" value={values[field.key] || ''} onChange={(e) => set(field.key, e.target.value)} /></div>;
+            return (
+              <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span>
+                <input className={`mpr-input ${field.k === 'money' ? 'right' : ''}`} style={{ width: field.k === 'text' && field.key === 'name' ? 325 : 180 }} value={values[field.key] ?? (field.k === 'money' ? '0.00' : '')} onChange={(e) => set(field.key, e.target.value)} />
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="save-container">

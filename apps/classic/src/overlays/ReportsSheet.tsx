@@ -78,7 +78,8 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
                 <div className="rep-sample-bar">
                   <button type="button" onClick={() => setSampleOpen(false)}>Back</button>
                   <button type="button" onClick={() => window.print()}>Print</button>
-                  <a href={rep.preview} download>Download sample</a>
+                  <a href={rep.preview} download>Download PDF Sample</a>
+                  <a href={rep.preview} download>Download Excel Sample</a>
                 </div>
                 <img className="rep-preview-img rep-preview-img-open" src={rep.preview} alt={`${rep.name} sample`} />
               </div>
