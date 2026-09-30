@@ -96,7 +96,34 @@
 .rep-desc p { margin-bottom: 6px; }
 .rep-preview { flex: 1; min-height: 180px; background: #dce4e9; padding-top: 40px; position: relative; overflow: hidden; }
 .rep-preview-img { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
-.rep-preview-btn { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(68, 68, 68, 0.8); color: #fff; border: 2px solid #fff; border-radius: 4px; padding: 5px 20px; min-width: 124px; font-size: 18px; font-weight: 600; letter-spacing: -0.75px; }
+.rep-preview-btn { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); background: rgba(68, 68, 68, 0.8); color: #fff; border: 2px solid #fff; border-radius: 4px; padding: 5px 20px; min-width: 124px; font-size: 18px; font-weight: 600; letter-spacing: -0.75px; }
+.rep-preview-btn:hover { background: rgba(68, 68, 68, 0.9); }
+
+/* Live Reports dialog is a 1200px centered sheet, not a full-bleed panel. */
+.reports-sheet.sheet { width: 1200px; max-width: calc(100vw - 24px); height: min(765px, calc(100vh - 40px)); left: 50%; top: 50%; right: auto; bottom: auto; transform: translate(-50%, -50%); border-radius: 0; }
+.reports-sheet .sheet-header { height: 58px; background: #fff; }
+.reports-sheet .sheet-header .crumb { height: 58px; font-size: 14px; font-weight: 600; cursor: default; }
+.reports-sheet .crumb-log { width: 350px; flex: none; cursor: pointer; }
+.reports-sheet .crumb-meta { width: 250px; flex: none; }
+.reports-sheet .sheet-close { width: 100px; }
+.reports-sheet .rep-cats { width: 250px; background: #fff; }
+.reports-sheet .rep-list { width: 349px; background: #fff; }
+.reports-sheet .rep-cats-title,
+.reports-sheet .rep-list-title,
+.reports-sheet .rep-detail-title { height: 69px; padding: 20px 30px; font-size: 20px; font-weight: 600; background: #fff; border-bottom: 1px solid #e5e5e5; }
+.reports-sheet .rep-cats-list { padding: 11px 10px 8px; background: #fff; }
+.reports-sheet .rep-cat { width: 229px; height: 49px; margin: 0 0 16px; padding: 13px 10px 13px 35px; border-radius: 2px; border: 1px solid #e2e7ee; background: #f0f3f7; box-shadow: none; font-size: 15px; font-weight: 400; color: #022b54; }
+.reports-sheet .rep-cat:hover { background: #e7eef4; }
+.reports-sheet .rep-cat.active { background: #dbe6ef; font-weight: 600; }
+.reports-sheet .reports-list-item { min-height: 87px; padding: 30px; font-size: 18px; font-weight: 400; line-height: 25.7px; color: #022b54; background: transparent; border-bottom: 1px solid #e4e4e4; border-left: 0; }
+.reports-sheet .reports-list-item:hover,
+.reports-sheet .reports-list-item.active { background: #e7eef4; font-weight: 600; padding-left: 30px; border-left: 0; }
+.reports-sheet .rep-detail { background: #f7f9fb; }
+.reports-sheet .rep-detail-body { background: #fff; padding: 16px 24px 8px; }
+.reports-sheet .rep-generate { height: 34px; padding: 6px 12px; border-radius: 4px; background: #043d75; border: 1px solid #043d75; font-size: 14px; font-weight: 400; }
+.reports-sheet .rep-saved { color: #043d75; font-size: 14px; font-weight: 400; margin: 4px 0 12px; }
+.reports-sheet .rep-preview { flex: 1; min-height: 220px; background: #dce4e9; padding: 28px 16px 16px; display: flex; justify-content: center; align-items: flex-start; }
+.reports-sheet .rep-preview-img { width: 420px; max-width: 100%; height: auto; margin: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
 
 /* Import — Select Asset Type */
 .import-modal .modal-body { padding: 70px 40px 120px; text-align: center; min-height: calc(100vh - 80px); display: flex; flex-direction: column; justify-content: center; }

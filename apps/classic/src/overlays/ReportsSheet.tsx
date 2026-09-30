@@ -32,12 +32,11 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
   };
 
   return (
-    <Sheet onClose={onClose} header={(
+    <Sheet className="reports-sheet" onClose={onClose} header={(
       <>
-        <span className="crumb crumb-first" />
-        <span className="crumb" style={{ flex: 1, cursor: 'pointer' }} onClick={() => open({ kind: 'reportLog' })}>Report Log</span>
-        <span className="crumb" style={{ flex: 1 }}>Family: {family?.name ?? ''}</span>
-        <span className="crumb" style={{ flex: 1 }}>Portfolio: {truncate(portfolio?.fullName || portfolio?.shortName || '', 20)}</span>
+        <span className="crumb crumb-log" onClick={() => open({ kind: 'reportLog' })}>Report Log</span>
+        <span className="crumb crumb-meta">Family: {family?.name ?? ''}</span>
+        <span className="crumb crumb-meta">Portfolio: {truncate(portfolio?.fullName || portfolio?.shortName || '', 28)}</span>
       </>
     )}>
       <div className="rep-cats">
@@ -59,21 +58,18 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
         <div className="rep-detail-title">{rep?.name ?? ''}</div>
         {rep && (
           <div className="rep-detail-body">
-            {rep.generate ? (
-              <button type="button" className="rep-generate" onClick={() => generate('PDF')}>Generate Report</button>
-            ) : rep.chips.length > 0 ? (
+            {rep.generate && <button type="button" className="rep-generate" onClick={() => generate('PDF')}>Generate Report</button>}
+            {rep.chips.length > 0 && (
               <div className="rep-chips">{rep.chips.map((c) => <button type="button" key={c} className="rep-chip" onClick={() => generate('Excel')}>{c}</button>)}</div>
-            ) : (
-              <div className="rep-chips"><button type="button" className="rep-chip" onClick={() => generate('Excel')}>Excel</button><button type="button" className="rep-chip" onClick={() => generate('PDF')}>PDF</button></div>
             )}
-            {rep.generate && <div className="rep-saved"><span className="material-icons">bookmark</span>Saved Configs</div>}
+            <div className="rep-saved"><span className="material-icons">bookmark</span>Saved Configs</div>
             <div className="rep-desc">{rep.description.map((d, i) => <p key={i}>{d}</p>)}</div>
           </div>
         )}
-        {rep?.preview && (
+        {rep && (
           <div className="rep-preview">
-            <img className="rep-preview-img" src={rep.preview} alt="" />
-            <button type="button" className="rep-preview-btn" onClick={() => generate('PDF')}>View Sample Report</button>
+            {rep.preview && <img className="rep-preview-img" src={rep.preview} alt={`${rep.name} sample`} />}
+            <button type="button" className="rep-preview-btn" onClick={() => { if (rep.preview) window.open(rep.preview, '_blank', 'noopener'); }}>View Sample Report</button>
           </div>
         )}
       </div>
