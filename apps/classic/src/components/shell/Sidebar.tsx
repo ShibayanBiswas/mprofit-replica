@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { fmtAmount, fmtSigned, fmtSignedPct } from '@mprofit/shared';
 import { useOverlay } from '../../state/OverlayContext';
 import { useWorkspace, type SidebarFilter } from '../../state/WorkspaceContext';
@@ -87,13 +88,14 @@ export function Sidebar() {
           </button>
         </div>
       )}
-      {menu && menuPortfolio && (
-        <div className="port-context" style={{ left: menu.x, top: menu.y }} role="menu" onMouseDown={(e) => e.stopPropagation()}>
+      {menu && menuPortfolio && createPortal(
+        <div className="port-context" style={{ left: menu.x, top: menu.y }} role="menu" onMouseDown={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}>
           <button type="button" onClick={() => { selectPortfolio(menuPortfolio.id); setMenu(null); }}>View</button>
           <button type="button" onClick={() => { selectPortfolio(menuPortfolio.id); setMenu(null); open({ kind: 'action', action: 'editPortfolio' }); }}>{menuPortfolio.isGroup ? 'Edit Group' : 'Edit Portfolio'}</button>
           <button type="button" onClick={() => { setMenu(null); open({ kind: 'addPortfolio', variant: 'Portfolio' }); }}>New Portfolio</button>
           <button type="button" onClick={() => { setMenu(null); open({ kind: 'addPortfolio', variant: 'Group' }); }}>New Group</button>
-        </div>
+        </div>,
+        document.body,
       )}
       {/* Live has a "Refer a friend" footer here — intentionally omitted (01-IN-SCOPE-OUT-OF-SCOPE.md). */}
     </aside>

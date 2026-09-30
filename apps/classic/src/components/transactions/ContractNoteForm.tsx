@@ -309,7 +309,7 @@ function formSpec(code: string, label: string, values: Record<string, string>): 
         { k: 'text', label: 'Asset Name', key: 'name' },
         { k: 'money', label: 'Interest Rate', key: 'interest' },
         { k: 'select', label: 'Interest Type', key: 'interestType', options: INTEREST_TYPE },
-        { k: 'select', label: 'Interest Payment', key: 'interestPay', options: ['Monthly', 'Quarterly', 'Half-yearly', 'Yearly'] },
+        { k: 'select', label: 'Interest Payment', key: 'interestPay', options: ['Quarterly', 'Monthly', 'Half-yearly', 'Yearly'] },
         { k: 'date', label: 'Maturity Date', key: 'maturity' },
         { k: 'head', label: 'Transaction' },
         { k: 'date', label: 'Date', key: 'date' },
