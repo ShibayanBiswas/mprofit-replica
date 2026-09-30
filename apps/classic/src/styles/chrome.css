@@ -41,8 +41,9 @@
 .family-bar { height: 56px; flex: none; background: var(--family-bar); border-bottom: 1px solid var(--panel-border); display: flex; align-items: center; padding: 0 20px 0 5px; position: relative; z-index: 250; }
 .family-btn { display: inline-flex; align-items: center; height: 50px; background: transparent; border: 0; padding: 5px 6px 5px 17px; font-size: 20px; line-height: 40px; font-weight: 600; color: var(--navy-text); font-family: var(--font); }
 .family-btn .caret { border-top-width: 7px; border-right-width: 7px; border-left-width: 7px; margin-left: 7px; color: var(--navy-text); }
-.family-dd .dd-menu { left: -10px; top: 40px; width: 350px; border: 0; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 260; }
-.family-dd .dd-menu.dd-left { left: -10px; }
+.family-bar, .family-dd { overflow: visible; }
+.family-dd .dd-menu { left: 0; top: 48px; width: 350px; border: 0; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 260; }
+.family-dd .dd-menu.dd-left { left: 0; }
 .fam-edit-row { display: flex; align-items: center; height: 40px; padding: 0 15px; gap: 15px; }
 .fam-edit-btn { font-weight: 400; color: var(--navy); cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; }
 .fam-edit-btn:hover { color: var(--blue); }
@@ -60,7 +61,7 @@
 .famtab-table tbody tr { cursor: pointer; }
 .famtab-table tbody tr:hover { background: #eef2f6; }
 .famtab-table tbody td { padding: 8px 15px; font-size: 12px; color: var(--navy); border-top: 1px solid #eee; }
-.famtab-scroll { max-height: 220px; overflow: auto; }
+.famtab-scroll { max-height: min(420px, 55vh); overflow-y: auto; overflow-x: hidden; }
 
 .search-bar { margin-left: auto; position: relative; width: 364px; }
 .port-search-input { width: 364px; height: 36px; border: 1px solid #ccc; border-radius: 5px; padding: 0 34px 0 44px; font-size: 14px; line-height: 20px; color: var(--text); background: #fff url('/assets/icons/chrome-ui/search-icon.svg') no-repeat 10px center; outline: none; position: relative; z-index: 201; }
@@ -164,6 +165,8 @@
 .asset-nav-item.active:hover { background: var(--navy); }
 .asset-nav-item:hover .asset-type-name,
 .asset-nav-item.active:hover .asset-type-name { color: #fff; }
+.asset-nav-item:hover .asset-type-icon,
+.asset-nav-item.active:hover .asset-type-icon { border-color: #fff; }
 .asset-type-icon { width: 26px; height: 17px; border: 1px solid var(--navy); background: #fff; font-size: 11px; line-height: 15.7143px; font-weight: 600; margin-right: 15px; display: inline-flex; align-items: center; justify-content: center; color: var(--navy); }
 .asset-type-name { font-size: 13px; color: var(--navy); white-space: nowrap; }
 

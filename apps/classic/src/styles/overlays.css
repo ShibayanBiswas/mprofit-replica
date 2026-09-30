@@ -128,7 +128,9 @@
 .reports-sheet .rep-generate { height: 34px; padding: 6px 12px; border-radius: 4px; background: #043d75; border: 1px solid #043d75; font-size: 14px; font-weight: 400; }
 .reports-sheet .rep-saved { color: #043d75; font-size: 14px; font-weight: 400; margin: 4px 0 12px; }
 .reports-sheet .rep-preview { flex: 1; min-height: 220px; background: #dce4e9; padding: 40px 0 0; display: flex; justify-content: center; align-items: flex-start; position: relative; overflow: hidden; }
-.reports-sheet .rep-preview-img { width: min(420px, 92%); height: 297px; max-height: none; margin: 0; object-fit: cover; object-position: top; box-shadow: 0 1px 4px rgba(0,0,0,0.12); background: #fff; }
+.reports-sheet .sheet-body { min-height: 0; overflow: hidden; }
+.reports-sheet .rep-cats-list, .reports-sheet .rep-list-items { overflow-y: auto; }
+.reports-sheet .rep-preview-img { width: min(420px, 92%); height: auto; max-height: 297px; margin: 0 auto; object-fit: contain; object-position: top; box-shadow: 0 1px 4px rgba(0,0,0,0.12); background: #fff; display: block; }
 .reports-sheet .rep-preview-btn { height: 40px; min-width: 186px; top: 50%; }
 .reports-sheet .rep-preview-img-open { width: min(720px, 100%); max-height: none; }
 .rep-sample { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; }

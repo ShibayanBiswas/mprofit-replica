@@ -13,10 +13,12 @@ export function Sidebar() {
 
   useEffect(() => {
     if (!menu) return;
-    const close = () => setMenu(null);
+    let armed = false;
+    const arm = window.setTimeout(() => { armed = true; }, 0);
+    const close = () => { if (armed) setMenu(null); };
     document.addEventListener('mousedown', close);
     document.addEventListener('scroll', close, true);
-    return () => { document.removeEventListener('mousedown', close); document.removeEventListener('scroll', close, true); };
+    return () => { window.clearTimeout(arm); document.removeEventListener('mousedown', close); document.removeEventListener('scroll', close, true); };
   }, [menu]);
 
   const visible = useMemo(() => {

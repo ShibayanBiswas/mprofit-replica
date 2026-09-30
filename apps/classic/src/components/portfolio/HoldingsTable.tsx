@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fmtAmount, fmtSignedPct } from '@mprofit/shared';
 import type { HoldingRow } from '@mprofit/shared';
+import { contractNotePath } from '../../app/routes';
 import { useOverlay } from '../../state/OverlayContext';
 import { useWorkspace } from '../../state/WorkspaceContext';
 import { Caret } from '../Dropdown';
@@ -11,8 +13,9 @@ interface Props { externalQuery: string }
 
 // Holdings grid: header (50px) → rows (50px) → NET WORTH footer (50px). Column widths fixed via <colgroup>.
 export function HoldingsTable({ externalQuery }: Props) {
-  const { summary, summaryLoading, mode, activeAssetCode, family, portfolio, preferences, assetClasses } = useWorkspace();
+  const { dbId, summary, summaryLoading, mode, activeAssetCode, family, portfolio, preferences, assetClasses } = useWorkspace();
   const { open } = useOverlay();
+  const navigate = useNavigate();
   const [q, setQ] = useState('');
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'name', dir: 1 });
   const decimals = preferences?.decimals ?? 'Show';
@@ -37,7 +40,7 @@ export function HoldingsTable({ externalQuery }: Props) {
   // Empty state escalates with what the tenant is missing: family → portfolio → transactions.
   const cta = !family ? { label: 'Add Family', onClick: () => open({ kind: 'addFamily' as const }) }
     : !portfolio || portfolio.isGroup ? { label: 'Add Portfolio', onClick: () => open({ kind: 'addPortfolio' as const, variant: 'Portfolio' as const }) }
-      : { label: 'Add a transaction', onClick: () => open({ kind: 'addTransaction' as const }) };
+      : { label: 'Add a transaction', onClick: () => navigate(contractNotePath(dbId, family?.id ?? '-', portfolio?.id ?? '-', activeAssetCode)) };
   const emptyCta = (
     <button type="button" className="btn-add-trans" onClick={cta.onClick}>
       <span className="btn-add-trans-icon">+</span><span className="add-trans-label">{cta.label}</span>
@@ -84,7 +87,7 @@ export function HoldingsTable({ externalQuery }: Props) {
         {summaryLoading && !summary ? <div className="blank-state">Loading…</div> : rows.length === 0 ? (
           <div>
             {/* Live puts the empty-state CTA in a 74px table row, indented past the 40px dropdown column. */}
-            {!isFo && (
+            {(
               <table className="sum-table">
                 <colgroup><col className="c-dd" /><col className="c-first" /><col className="c-sort" /><col className="c-qty" /><col className="c-inv" /><col className="c-price" /><col className="c-today" /><col className="c-unreal" /><col className="c-value" /><col className="c-end" /></colgroup>
                 <tbody>

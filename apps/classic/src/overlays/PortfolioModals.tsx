@@ -18,6 +18,8 @@ export function AddPortfolioModal({ variant, onClose }: { variant: Variant; onCl
   const [entity, setEntity] = useState('');
   const [more, setMore] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [trading, setTrading] = useState(false);
+  const [resident, setResident] = useState(true);
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
@@ -30,7 +32,7 @@ export function AddPortfolioModal({ variant, onClose }: { variant: Variant; onCl
     if (!family || !shortName.trim()) return;
     setBusy(true);
     try {
-      const body: Partial<Portfolio> = { shortName: capitalizeInitials(shortName), fullName: capitalizeInitials(fullName || shortName), pan, type, isGroup, isTrading: false, isPms: pms || strategy };
+      const body: Partial<Portfolio> = { shortName: capitalizeInitials(shortName), fullName: capitalizeInitials(fullName || shortName), pan, type, isGroup, isTrading: trading, isPms: pms || strategy };
       const p = await classicApi.addPortfolio(family.id, body);
       await reloadPortfolios(); selectPortfolio(p.id); onClose();
     } finally { setBusy(false); }
@@ -55,7 +57,17 @@ export function AddPortfolioModal({ variant, onClose }: { variant: Variant; onCl
           <div className="form-row"><span className="form-label" /><label className="checkbox"><input type="checkbox" checked={pms} onChange={(e) => setPms(e.target.checked)} />PMS Portfolio</label></div>
           <div className="form-row"><span className="form-label">Entity</span><input className="form-control" value={entity} onChange={(e) => setEntity(e.target.value)} /><button type="button" className="if-add-btn" aria-label="Add entity" onClick={() => setMore(true)}>+</button></div>
           <div className="form-row" style={{ minHeight: 30 }}><span className="tool-link" style={{ fontSize: 14 }} onClick={() => setMore((m) => !m)}>Additional Options</span></div>
-          {more && <div className="form-row"><span className="form-label">PAN</span><input className="form-control" value={pan} onChange={(e) => setPan(e.target.value.toUpperCase())} maxLength={10} /></div>}
+          {more && (
+            <>
+              <div className="form-row"><span className="form-label" /><label className="checkbox"><input type="checkbox" checked={trading} onChange={(e) => setTrading(e.target.checked)} />Trading Portfolio</label></div>
+              <div className="form-row"><span className="form-label" /><label className="checkbox"><input type="checkbox" checked={resident} onChange={(e) => setResident(e.target.checked)} />Is Resident Individual for TDS on Dividends?</label></div>
+              <div className="form-row"><span className="form-label">Address</span><input className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} /></div>
+              <div className="form-row"><span className="form-label">City</span><input className="form-control" value={city} onChange={(e) => setCity(e.target.value)} /></div>
+              <div className="form-row"><span className="form-label">Country</span><input className="form-control" value={country} onChange={(e) => setCountry(e.target.value)} /></div>
+              <div className="form-row"><span className="form-label">Pincode</span><input className="form-control" value={pincode} onChange={(e) => setPincode(e.target.value)} /></div>
+              <div className="form-row"><span className="form-label">PAN</span><input className="form-control" value={pan} onChange={(e) => setPan(e.target.value.toUpperCase())} maxLength={10} /></div>
+            </>
+          )}
         </>
       )}
       {variant === 'Account Portfolio for Tally Integration' && <p className="saved-note">Account portfolios mirror your Tally ledgers for reconciliation.</p>}
