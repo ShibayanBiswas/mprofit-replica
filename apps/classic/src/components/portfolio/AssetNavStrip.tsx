@@ -22,7 +22,7 @@ export function AssetNavStrip() {
   return (
     <div className="asset-nav-container">
       {mode === 'INV' && <div className="asset-nav-button asset-nav-prev" role="button" aria-label="Previous asset classes" onClick={() => scrollBy(-300)} />}
-      <div className="asset-nav-scroll" ref={scroller}>
+      <div className="asset-nav-scroll" ref={scroller} onWheel={(e) => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) scroller.current?.scrollBy({ left: e.deltaY }); }}>
         {tabs.map((a) => (
           <div key={a.code} className={`asset-nav-item ${a.code === activeAssetCode ? 'active' : ''}`} onClick={() => openTab(a.code)}>
             <span className="asset-type-icon">{a.badge}</span>

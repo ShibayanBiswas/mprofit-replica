@@ -42,7 +42,8 @@
 .family-btn { display: inline-flex; align-items: center; height: 50px; background: transparent; border: 0; padding: 5px 6px 5px 17px; font-size: 20px; line-height: 40px; font-weight: 600; color: var(--navy-text); font-family: var(--font); }
 .family-btn .caret { border-top-width: 7px; border-right-width: 7px; border-left-width: 7px; margin-left: 7px; color: var(--navy-text); }
 .family-bar, .family-dd { overflow: visible; }
-.family-dd .dd-menu { left: 0; top: 48px; width: 350px; border: 0; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 260; }
+.family-dd { position: relative; z-index: 280; }
+.family-dd .dd-menu { left: 0; top: 48px; width: 350px; border: 0; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 280; }
 .family-dd .dd-menu.dd-left { left: 0; }
 .fam-edit-row { display: flex; align-items: center; height: 40px; padding: 0 15px; gap: 15px; }
 .fam-edit-btn { font-weight: 400; color: var(--navy); cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; }
@@ -148,11 +149,11 @@
 .referral-container .material-icons { font-size: 22px; color: var(--navy); margin-right: 12px; }
 .referral-text { font-size: 16px; font-weight: 600; color: var(--navy); }
 
-.middle-container { flex: 1; min-width: 0; margin-top: 8px; padding: 0 20px; display: flex; flex-direction: column; min-height: 0; overflow-x: auto; }
-.middle-container-inner { flex: 1; min-height: 0; min-width: 1040px; border: 1px solid var(--panel-border); border-bottom: 0; border-radius: 5px 5px 0 0; display: flex; flex-direction: column; overflow: hidden; }
+.middle-container { flex: 1; min-width: 0; margin-top: 8px; padding: 0 20px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.middle-container-inner { flex: 1; min-height: 0; min-width: 0; width: 100%; border: 1px solid var(--panel-border); border-bottom: 0; border-radius: 5px 5px 0 0; display: flex; flex-direction: column; overflow: hidden; }
 
 /* ---- Asset nav strip ---- */
-.asset-nav-container { height: 38px; flex: none; background: var(--navy); padding-bottom: 1px; border-radius: 3px 3px 0 0; display: flex; }
+.asset-nav-container { height: 38px; flex: none; width: 100%; min-width: 0; background: var(--navy); padding-bottom: 1px; border-radius: 3px 3px 0 0; display: flex; }
 .asset-nav-button { width: 20px; flex: none; background-color: var(--tab-arrow); background-repeat: no-repeat; background-position: center; cursor: pointer; }
 .asset-nav-prev { background-image: url('/assets/icons/chrome-ui/left-slider-arrow.svg'); border-radius: 3px 0 0 0; }
 .asset-nav-next { background-image: url('/assets/icons/chrome-ui/right-slider-arrow.svg'); border-radius: 0 3px 0 0; }
@@ -171,7 +172,7 @@
 .asset-type-name { font-size: 13px; color: var(--navy); white-space: nowrap; }
 
 /* ---- Holdings table ---- */
-.stocks-group { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.stocks-group { flex: 1; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow-x: auto; }
 .sum-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 15px; }
 /* Live keeps four columns at fixed px (40/250/35/15) and splits the remainder in a constant ratio.
    Verified at two widths: 1214px table -> 163/175/93/128/140/175, 1053px table -> 133.1/142.6/76/104.6/114.1/142.6. */

@@ -13,12 +13,14 @@ export function Sidebar() {
 
   useEffect(() => {
     if (!menu) return;
-    let armed = false;
-    const arm = window.setTimeout(() => { armed = true; }, 0);
-    const close = () => { if (armed) setMenu(null); };
-    document.addEventListener('mousedown', close);
-    document.addEventListener('scroll', close, true);
-    return () => { window.clearTimeout(arm); document.removeEventListener('mousedown', close); document.removeEventListener('scroll', close, true); };
+    const close = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest('.port-context')) return;
+      setMenu(null);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenu(null); };
+    const arm = window.setTimeout(() => document.addEventListener('mousedown', close), 0);
+    document.addEventListener('keydown', onKey);
+    return () => { window.clearTimeout(arm); document.removeEventListener('mousedown', close); document.removeEventListener('keydown', onKey); };
   }, [menu]);
 
   const visible = useMemo(() => {

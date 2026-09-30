@@ -24,7 +24,9 @@
 .tx-title { margin: 8px 15px 12px; font-size: 20px; line-height: 28px; font-weight: 600; color: #282828; }
 .tx-section { margin: 18px 15px 4px; font-size: 16px; font-weight: 600; color: #282828; }
 .tx-form .if-item-container { min-height: 50px; }
-.tx-form .ng-select-control { max-width: 360px; }
+.tx-form .if-item-lbl { width: 180px; max-width: 180px; flex: none; margin-right: 16px; font-size: 16px; color: #333; }
+.tx-form .if-input-container { flex: 1; max-width: 560px; }
+.tx-form .ng-select-control { width: 100%; max-width: none; border: 1px solid #007eff; }
 .tx-form .ng-select-control.right { text-align: right; }
 .tx-value { font-size: 16px; line-height: 36px; color: var(--navy-text); }
 .tx-note { height: 72px; padding-top: 8px; resize: vertical; }
