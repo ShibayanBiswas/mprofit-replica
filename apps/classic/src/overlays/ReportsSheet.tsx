@@ -36,6 +36,7 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
   return (
     <Sheet className="reports-sheet" onClose={onClose} header={(
       <>
+        <span className="crumb crumb-spacer" aria-hidden="true" />
         <span className="crumb crumb-log" onClick={() => open({ kind: 'reportLog' })}>Report Log</span>
         <span className="crumb crumb-meta">Family: {family?.name ?? ''}</span>
         <span className="crumb crumb-meta">Portfolio: {truncate(portfolio?.fullName || portfolio?.shortName || '', 28)}</span>
@@ -56,7 +57,10 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
         </div>
       </div>
       <div className="rep-detail">
-        <div className="rep-detail-title">{rep?.name ?? ''}</div>
+        <div className="rep-detail-head">
+          <div className="rep-detail-title">{rep?.name ?? ''}</div>
+          <div className="rep-detail-cap" aria-hidden="true" />
+        </div>
         {rep && (
           <div className="rep-detail-body">
             {rep.generate && <button type="button" className="rep-generate" onClick={() => generate('PDF')}>Generate Report</button>}
