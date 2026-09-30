@@ -105,6 +105,7 @@ export interface ReportItem {
   chips: string[];
   hasPreview: boolean;
   generate?: boolean;
+  preview?: string;
 }
 
 export interface ReportCategory {

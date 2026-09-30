@@ -70,11 +70,9 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
             <div className="rep-desc">{rep.description.map((d, i) => <p key={i}>{d}</p>)}</div>
           </div>
         )}
-        {rep?.hasPreview && (
+        {rep?.preview && (
           <div className="rep-preview">
-            <div className="rep-preview-img">
-              <span className="line dark" /><span className="line head" /><span className="line" /><span className="line" /><span className="line" /><span className="line" /><span className="line" />
-            </div>
+            <img className="rep-preview-img" src={rep.preview} alt="" />
             <button type="button" className="rep-preview-btn" onClick={() => generate('PDF')}>View Sample Report</button>
           </div>
         )}
