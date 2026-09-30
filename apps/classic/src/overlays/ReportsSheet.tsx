@@ -16,11 +16,13 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
   const [catId, setCatId] = useState(initialCategoryId ?? '');
   const [repId, setRepId] = useState(initialReportId ?? '');
   const [toast, setToast] = useState<string | null>(null);
+  const [sampleOpen, setSampleOpen] = useState(false);
 
   useEffect(() => { void classicApi.reportsCatalog().then((c) => { setCatalog(c); if (!catId) setCatId(c.categories[0]?.id ?? ''); }); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const cat = useMemo(() => catalog?.categories.find((c) => c.id === catId) ?? catalog?.categories[0] ?? null, [catalog, catId]);
   useEffect(() => { if (cat && !cat.reports.some((r) => r.id === repId)) setRepId(cat.reports[0]?.id ?? ''); }, [cat, repId]);
+  useEffect(() => { setSampleOpen(false); }, [repId]);
   const rep = cat?.reports.find((r) => r.id === repId) ?? null;
 
   const generate = (format: 'PDF' | 'Excel') => {
@@ -65,10 +67,23 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
             <div className="rep-desc">{rep.description.map((d, i) => <p key={i}>{d}</p>)}</div>
           </div>
         )}
-        {rep && (
+        {rep?.preview && (
           <div className="rep-preview">
-            {rep.preview && <img className="rep-preview-img" src={rep.preview} alt={`${rep.name} sample`} />}
-            <button type="button" className="rep-preview-btn" onClick={() => { if (rep.preview) window.open(rep.preview, '_blank', 'noopener'); }}>View Sample Report</button>
+            {sampleOpen ? (
+              <div className="rep-sample">
+                <div className="rep-sample-bar">
+                  <button type="button" onClick={() => setSampleOpen(false)}>Back</button>
+                  <button type="button" onClick={() => window.print()}>Print</button>
+                  <a href={rep.preview} download>Download sample</a>
+                </div>
+                <img className="rep-preview-img rep-preview-img-open" src={rep.preview} alt={`${rep.name} sample`} />
+              </div>
+            ) : (
+              <>
+                <img className="rep-preview-img" src={rep.preview} alt={`${rep.name} sample`} />
+                <button type="button" className="rep-preview-btn" onClick={() => setSampleOpen(true)}>View Sample Report</button>
+              </>
+            )}
           </div>
         )}
       </div>

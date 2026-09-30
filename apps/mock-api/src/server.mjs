@@ -76,7 +76,9 @@ const readBody = (req) => new Promise((resolve) => {
   req.on('data', (c) => (data += c));
   req.on('end', () => { try { resolve(data ? JSON.parse(data) : {}); } catch { resolve({}); } });
 });
-const publicUser = (u) => ({ id: u.id, email: u.email, displayName: u.displayName, role: u.role });
+const publicUser = (u) => ({ id: u.id, email: u.email, displayName: capitalizeInitials(u.displayName), role: u.role });
+const presentFamily = (f) => ({ ...f, name: capitalizeInitials(f.name) });
+const presentPortfolio = (p) => ({ ...p, shortName: capitalizeInitials(p.shortName), fullName: capitalizeInitials(p.fullName || p.shortName) });
 
 function computeSummary(portfolioId, mode) {
   const p = state.portfolios.find((x) => x.id === portfolioId);
@@ -212,7 +214,7 @@ route('POST', '/api/Auth/ChangePassword', (ctx) => {
 
 // databases / families / portfolios
 route('GET', '/api/Databases', (ctx) => json(ctx.res, 200, databases));
-route('GET', '/api/Databases/:dbId/Families', (ctx) => json(ctx.res, 200, state.families.filter((f) => f.dbId === ctx.params.dbId)));
+route('GET', '/api/Databases/:dbId/Families', (ctx) => json(ctx.res, 200, state.families.filter((f) => f.dbId === ctx.params.dbId).map(presentFamily)));
 route('POST', '/api/Databases/:dbId/Families', (ctx) => {
   const f = { id: crypto.randomBytes(8).toString('hex'), dbId: ctx.params.dbId, name: capitalizeInitials(ctx.body.name || 'New Family') };
   state.families.push(f);
@@ -224,7 +226,7 @@ route('PUT', '/api/Families/:familyId', (ctx) => {
   const f = state.families.find((x) => x.id === ctx.params.familyId); if (!f) return json(ctx.res, 404, { message: 'Not found' });
   if (ctx.body.name) f.name = capitalizeInitials(ctx.body.name); json(ctx.res, 200, f);
 });
-route('GET', '/api/Families/:familyId/Portfolios', (ctx) => json(ctx.res, 200, state.portfolios.filter((p) => p.familyId === ctx.params.familyId)));
+route('GET', '/api/Families/:familyId/Portfolios', (ctx) => json(ctx.res, 200, state.portfolios.filter((p) => p.familyId === ctx.params.familyId).map(presentPortfolio)));
 route('POST', '/api/Families/:familyId/Portfolios', (ctx) => {
   const b = ctx.body;
   const p = { id: crypto.randomBytes(8).toString('hex'), familyId: ctx.params.familyId, shortName: capitalizeInitials(b.shortName || 'New Portfolio'), fullName: capitalizeInitials(b.fullName || b.shortName || 'New Portfolio'), pan: (b.pan || '').toUpperCase(), type: b.type || 'Investment', isGroup: !!b.isGroup, isTrading: !!b.isTrading, isPms: !!b.isPms };
@@ -236,7 +238,7 @@ route('PUT', '/api/Portfolios/:portfolioId', (ctx) => {
   json(ctx.res, 200, p);
 });
 route('GET', '/api/Portfolios/:portfolioId', (ctx) => {
-  const p = state.portfolios.find((x) => x.id === ctx.params.portfolioId); p ? json(ctx.res, 200, p) : json(ctx.res, 404, { message: 'Not found' });
+  const p = state.portfolios.find((x) => x.id === ctx.params.portfolioId); p ? json(ctx.res, 200, presentPortfolio(p)) : json(ctx.res, 404, { message: 'Not found' });
 });
 route('GET', '/api/Portfolios/:portfolioId/Summary', (ctx) => {
   const s = computeSummary(ctx.params.portfolioId, ctx.query.get('mode') === 'FO' ? 'FO' : 'INV');
