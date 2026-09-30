@@ -34,19 +34,13 @@ function useOutsideClose(open: boolean, onClose: () => void) {
 }
 
 function FamilySelector() {
-  const { family, families, dbId, selectFamily } = useWorkspace();
+  const { family, families, portfolios, dbId, selectFamily } = useWorkspace();
   const { open: openOverlay } = useOverlay();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [tab, setTab] = useState<'RECENT' | 'ALL'>('RECENT');
-  const [hits, setHits] = useState<SearchHit[]>([]);
   const ref = useOutsideClose(open, () => setOpen(false));
-
-  useEffect(() => {
-    if (!open) return;
-    void classicApi.search(q, tab === 'RECENT' ? 'RECENT' : 'ALL').then(setHits).catch(() => setHits([]));
-  }, [open, q, tab]);
 
   const filteredFamilies = useMemo(() => families.filter((f) => f.name.toLowerCase().includes(q.toLowerCase())), [families, q]);
 
@@ -75,16 +69,19 @@ function FamilySelector() {
             <table className="famtab-table">
               <thead><tr><td>Family</td><td>Portfolio</td></tr></thead>
               <tbody>
-                {tab === 'RECENT' ? hits.map((h) => (
-                  <tr key={h.portfolioId} onClick={() => { setOpen(false); navigate(portfolioPath(dbId, h.familyId, h.portfolioId)); }}>
-                    <td>{h.familyName}</td><td>{h.portfolioName}</td>
+                {portfolios
+                  .filter((p) => !q || `${family?.name ?? ''} ${p.shortName} ${p.fullName}`.toLowerCase().includes(q.toLowerCase()))
+                  .map((p) => (
+                  <tr key={p.id} onClick={() => { setOpen(false); navigate(portfolioPath(dbId, family?.id ?? '', p.id)); }}>
+                    <td>{family?.name}</td><td>{p.shortName}</td>
                   </tr>
-                )) : filteredFamilies.map((f) => (
+                ))}
+                {tab === 'ALL' && filteredFamilies.filter((f) => f.id !== family?.id).map((f) => (
                   <tr key={f.id} onClick={() => { setOpen(false); void selectFamily(f.id); }}>
                     <td>{f.name}</td><td />
                   </tr>
                 ))}
-                {(tab === 'RECENT' ? hits.length === 0 : filteredFamilies.length === 0) && <tr><td colSpan={2} style={{ color: '#999' }}>No results</td></tr>}
+                {portfolios.length === 0 && filteredFamilies.length === 0 && <tr><td colSpan={2} style={{ color: '#999' }}>No results</td></tr>}
               </tbody>
             </table>
           </div>

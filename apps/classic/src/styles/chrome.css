@@ -137,6 +137,9 @@
 .tab-c:hover .c-name, .tab-c:hover .port-icon { color: #fff; }
 .tab-c.active { background: var(--sidebar-active); }
 .tab-c.active .c-name, .tab-c.active .port-icon { color: var(--navy-text); }
+.port-context { position: fixed; z-index: 4000; min-width: 160px; background: #fff; border: 1px solid #f2f2f2; box-shadow: 0 6px 32px -9px rgba(0,0,0,0.36); padding: 6px 0; }
+.port-context button { display: block; width: 100%; text-align: left; background: transparent; border: 0; padding: 8px 16px; font-size: 14px; font-weight: 400; color: #333; font-family: "Source Sans Pro", Arial, sans-serif; }
+.port-context button:hover { background: #e7eef4; color: #012b53; }
 .btn-add-port { display: inline-flex; align-items: center; background: #fff; border: 0; padding: 0; margin: 10px 0 30px 10px; font-size: 12px; line-height: 17.1429px; font-weight: 600; color: var(--navy); }
 .btn-add-port .btn-add-icon { width: 24px; height: 24px; border-radius: 24px; font-size: 24px; line-height: 23px; margin-right: 0; }
 .add-port-label { font-size: 16px; line-height: 22.8571px; font-weight: 600; letter-spacing: -0.67px; color: var(--navy); margin-left: 11px; }
@@ -155,10 +158,12 @@
 .asset-nav-scroll { flex: 1; min-width: 0; overflow-x: auto; overflow-y: hidden; display: flex; scroll-behavior: smooth; scrollbar-width: none; }
 .asset-nav-scroll::-webkit-scrollbar { height: 0; }
 .asset-nav-item { height: 37px; flex: none; display: flex; align-items: center; padding: 0 20px; background: var(--tab-strip); color: var(--navy); border-right: 1px solid var(--panel-border); cursor: pointer; user-select: none; transition: background-color 0.15s ease, color 0.15s ease; }
-.asset-nav-item:hover { background: var(--navy); }
-.asset-nav-item:hover .asset-type-name { color: #fff; }
 .asset-nav-item.active { background: var(--tab-strip); }
 .asset-nav-item.active .asset-type-name { color: var(--navy); }
+.asset-nav-item:hover,
+.asset-nav-item.active:hover { background: var(--navy); }
+.asset-nav-item:hover .asset-type-name,
+.asset-nav-item.active:hover .asset-type-name { color: #fff; }
 .asset-type-icon { width: 26px; height: 17px; border: 1px solid var(--navy); background: #fff; font-size: 11px; line-height: 15.7143px; font-weight: 600; margin-right: 15px; display: inline-flex; align-items: center; justify-content: center; color: var(--navy); }
 .asset-type-name { font-size: 13px; color: var(--navy); white-space: nowrap; }
 

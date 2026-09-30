@@ -29,6 +29,7 @@ export function ContractNoteForm() {
   const [saving, setSaving] = useState(false);
 
   const back = () => navigate(portfolioPath(dbId, family?.id ?? '-', portfolio?.id ?? '-'));
+  const stockLike = assetCode === 'EQ' || assetCode === 'SFO' || assetCode === 'OFO';
 
   const total = useMemo(() => {
     const buy = buys.reduce((s, l) => s + num(l.qty) * num(l.price) + num(l.brokerage), 0);
@@ -54,6 +55,10 @@ export function ContractNoteForm() {
       back();
     } finally { setSaving(false); }
   };
+
+  if (!stockLike) {
+    return <SimpleBuySell assetCode={assetCode} label={cls?.label ?? assetCode} portfolioId={portfolio?.id} onBack={back} onSaved={async () => { await reloadSummary(); back(); }} />;
+  }
 
   return (
     <div className="cn-main-container">
@@ -129,6 +134,64 @@ export function ContractNoteForm() {
           <input id="autoTransfer" type="checkbox" checked={autoTransfer} onChange={(e) => setAutoTransfer(e.target.checked)} />
           <label className="mar-0" htmlFor="autoTransfer">Automatically transfer charges?</label>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function SimpleBuySell({ assetCode, label, portfolioId, onBack, onSaved }: { assetCode: string; label: string; portfolioId?: string; onBack: () => void; onSaved: () => Promise<void> }) {
+  const nameLabel = assetCode.startsWith('MF') ? 'Fund Name' : assetCode === 'FD' ? 'Deposit Name' : 'Asset Name';
+  const priceLabel = assetCode.startsWith('MF') ? 'NAV' : 'Price';
+  const [type, setType] = useState<'Buy' | 'Sell'>('Buy');
+  const [date, setDate] = useState('');
+  const [name, setName] = useState('');
+  const [qty, setQty] = useState('0');
+  const [price, setPrice] = useState('0.00');
+  const [stamp, setStamp] = useState('0.00');
+  const [saving, setSaving] = useState(false);
+  const net = (Number(qty) || 0) * (Number(price) || 0);
+  const gross = net + (Number(stamp) || 0);
+
+  const save = async () => {
+    if (!portfolioId || !name.trim()) return;
+    setSaving(true);
+    try {
+      await classicApi.addTransaction(portfolioId, {
+        assetType: label, type, assetName: name, date: date || new Date().toISOString().slice(0, 10),
+        quantity: Number(qty) || 0, rate: Number(price) || 0, amount: net,
+      });
+      await onSaved();
+    } finally { setSaving(false); }
+  };
+
+  return (
+    <div className="cn-main-container">
+      <div className="breadcrumb-margins">
+        <div className="breadcrumb-container">
+          <div className="back-icon" role="button" tabIndex={0} onClick={onBack}><i className="material-icons md-18 icon-middle">arrow_back</i><span>Back</span></div>
+          <div className="click-item past-item"><span>INV</span><i className="material-icons md-18 icon-middle next-icon">navigate_next</i></div>
+          <div className="click-item past-item"><span>{label}</span><i className="material-icons md-18 icon-middle next-icon">navigate_next</i></div>
+          <div><span>New Transaction</span></div>
+        </div>
+      </div>
+      <div className="cn-scroll">
+        <div className="cn-padding" style={{ maxWidth: 640 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 16 }}>{label} - Buy/Sell</h2>
+          <div className="cn-item-container"><span className="cn-item-lbl">Trans. Type</span>
+            <select className="form-date-dropdown" style={{ width: 210 }} value={type} onChange={(e) => setType(e.target.value as 'Buy' | 'Sell')}><option>Buy</option><option>Sell</option></select>
+          </div>
+          <div className="cn-item-container"><span className="cn-item-lbl">Date</span><input className="form-date-dropdown" style={{ width: 210 }} type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
+          <div className="cn-item-container"><span className="cn-item-lbl">{nameLabel}</span><input className="mpr-input" style={{ width: 325 }} value={name} onChange={(e) => setName(e.target.value)} /></div>
+          <div className="cn-item-container"><span className="cn-item-lbl">Quantity</span><input className="mpr-input right" style={{ width: 160 }} value={qty} onChange={(e) => setQty(e.target.value)} /></div>
+          <div className="cn-item-container"><span className="cn-item-lbl">{priceLabel}</span><input className="mpr-input right" style={{ width: 160 }} value={price} onChange={(e) => setPrice(e.target.value)} /></div>
+          <div className="cn-item-container"><span className="cn-item-lbl">Net Amount</span><span className="cn-total-value">{money(net)}</span></div>
+          <div className="cn-item-container"><span className="cn-item-lbl">Stamp Charges</span><input className="mpr-input right" style={{ width: 160 }} value={stamp} onChange={(e) => setStamp(e.target.value)} /></div>
+          <div className="cn-item-container"><span className="cn-item-lbl">Gross Amount</span><span className="cn-total-value">{money(gross)}</span></div>
+        </div>
+      </div>
+      <div className="save-container">
+        <div className="save-action-btn-container"><span className="save-form-action-btn save-action-btn" role="button" tabIndex={0} onClick={() => void save()}>{saving ? 'Saving…' : 'Save'}</span></div>
+        <div className="save-action-btn-container"><span className="save-form-action-btn cancel-action-btn" role="button" tabIndex={0} onClick={onBack}>Cancel</span></div>
       </div>
     </div>
   );
