@@ -32,19 +32,8 @@ export const brokers = [
 ];
 
 export const importTemplates = [
-  { id: 't0', name: 'Mutual Fund CAS - CAMSOnline', brokerId: null, assetType: 'MF', format: 'PDF', recommended: true, autoImport: true },
-  { id: 't1', name: 'Contract Notes (PDF)', brokerId: null, assetType: 'Stocks', format: 'PDF', recommended: true, autoImport: true },
-  { id: 't2', name: 'Trade Book / Tradebook (Excel)', brokerId: null, assetType: 'Stocks', format: 'Excel', recommended: true, autoImport: false },
-  { id: 't3', name: 'NSDL / CDSL CAS (PDF)', brokerId: null, assetType: 'Stocks', format: 'PDF', recommended: false, autoImport: true },
-  { id: 't4', name: 'MProfit Stocks Template', brokerId: null, assetType: 'Stocks', format: 'Excel', recommended: false, autoImport: false },
-  { id: 't5', name: 'CAMS / KFintech CAS (PDF)', brokerId: null, assetType: 'Mutual Funds', format: 'PDF', recommended: true, autoImport: true },
-  { id: 't6', name: 'MF Central CAS (PDF)', brokerId: null, assetType: 'Mutual Funds', format: 'PDF', recommended: true, autoImport: true },
-  { id: 't7', name: 'MProfit Mutual Funds Template', brokerId: null, assetType: 'Mutual Funds', format: 'Excel', recommended: false, autoImport: false },
-  { id: 't8', name: 'Bank Statement (Excel/CSV)', brokerId: null, assetType: 'Banks', format: 'Excel', recommended: true, autoImport: false },
-  { id: 't9', name: 'MProfit Banks Template', brokerId: null, assetType: 'Banks', format: 'Excel', recommended: false, autoImport: false },
-  { id: 't10', name: 'F&O Contract Notes (PDF)', brokerId: null, assetType: 'F&O', format: 'PDF', recommended: true, autoImport: true },
-  { id: 't11', name: 'F&O Trade Book (Excel)', brokerId: null, assetType: 'F&O', format: 'Excel', recommended: false, autoImport: false },
-  { id: 't12', name: 'MProfit Others Template (FDs, PPF, Gold, Property…)', brokerId: null, assetType: 'Others', format: 'Excel', recommended: true, autoImport: false },
+  { id: 't-ar', name: 'Anand Rathi - Trade Summary', brokerId: null, assetType: 'EQ', format: 'Excel', recommended: true, autoImport: false },
+  { id: 't-cams', name: 'Mutual Fund CAS - CAMSOnline', brokerId: null, assetType: 'MF', format: 'PDF', recommended: true, autoImport: true },
 ];
 
 export const changelog = [

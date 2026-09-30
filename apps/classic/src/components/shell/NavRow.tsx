@@ -95,23 +95,23 @@ function Toolbar({ onAssetSearch }: { onAssetSearch: (q: string) => void }) {
         <Dropdown className="toolbar-dd" align="right" menuClassName="analytics-preview-menu" trigger={() => (
           <button type="button" className="analytics-cta-btn" aria-label="Open Analytics"><img src="/assets/icons/chrome-ui/analytics-cta-icon.svg" alt="" /></button>
         )}>
-          <AnalyticsPreviewCard label="Today" icon="today" onClick={() => go('today')} />
+          <AnalyticsPreviewCard label="Today" src="/assets/icons/chrome-ui/analytics-preview-holdings.svg" onClick={() => go('today')} />
           <span className="analytics-preview-divider" />
-          <AnalyticsPreviewCard label="Holdings" icon="pie_chart" onClick={() => go('holding')} />
+          <AnalyticsPreviewCard label="Holdings" src="/assets/icons/chrome-ui/analytics-preview-holdings.svg" onClick={() => go('holding')} />
           <span className="analytics-preview-divider" />
-          <AnalyticsPreviewCard label="Performance" icon="show_chart" onClick={() => go('performance')} />
+          <AnalyticsPreviewCard label="Performance" src="/assets/icons/chrome-ui/analytics-preview-performance.svg" onClick={() => go('performance')} />
           <span className="analytics-preview-divider" />
-          <AnalyticsPreviewCard label="Equity Exposure" icon="bubble_chart" onClick={() => go('equity-exposure')} />
+          <AnalyticsPreviewCard label="Equity Exposure" src="/assets/icons/chrome-ui/analytics-preview-equity-exposure.svg" onClick={() => go('equity-exposure')} />
         </Dropdown>
       </div>
     </div>
   );
 }
 
-function AnalyticsPreviewCard({ label, icon, onClick }: { label: string; icon: string; onClick: () => void }) {
+function AnalyticsPreviewCard({ label, src, onClick }: { label: string; src: string; onClick: () => void }) {
   return (
     <div className="analytics-preview-card" onClick={onClick} role="menuitem">
-      <div className="preview-img"><span className="material-icons" style={{ fontSize: 34 }}>{icon}</span></div>
+      <img className="preview-img" src={src} alt="" />
       <span className="analytics-preview-label">{label}</span>
     </div>
   );

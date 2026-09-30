@@ -35,7 +35,8 @@ export function ImportModal({ initialStep, onClose }: { initialStep?: Step; onCl
 
   if (!step) {
     return (
-      <Modal onClose={onClose} size="full" closeStyle="dark-x" className="import-modal">
+      <Modal onClose={onClose} size="full" closeStyle="none" className="import-modal">
+        <button type="button" className="intro-close" aria-label="Close" onClick={onClose}><img src="/assets/icons/chrome-ui/onboarding-close.svg" alt="" /></button>
         <div className="import-title">Select Asset Type</div>
         <div className="import-cards">
           {CARDS.map((c) => (

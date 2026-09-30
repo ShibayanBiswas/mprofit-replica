@@ -10,7 +10,7 @@ export function HelpPanel({ onClose }: { onClose: () => void }) {
   return (
     <div className="help-panel-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="help-panel" role="dialog" aria-modal="true">
-        <div className="help-head">Support<button type="button" className="help-close" aria-label="Close" onClick={onClose}><span className="material-icons" style={{ fontSize: 18 }}>close</span></button></div>
+        <div className="help-head">Contact Us<button type="button" className="help-close" aria-label="Close" onClick={onClose}><span className="material-icons" style={{ fontSize: 18 }}>close</span></button></div>
         <div className="help-body">
           <div className="help-section-title">Contact Us</div>
           <ul className="help-contact">
