@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { decodeAnalyticsContext, type AnalyticsContext, type AnalyticsPreferences, type Family, type IndexQuote, type Portfolio, type Summary } from '@mprofit/shared';
 import { analyticsApi } from '../api/analyticsApi';
-import { isPage, isRailPage, pagePath, type AnalyticsPage } from '../app/routes';
+import { isPage, isRailPage, isRealId, pagePath, type AnalyticsPage } from '../app/routes';
 
 export type ViewBy = 'Category' | 'Asset Class';
 
@@ -48,11 +48,16 @@ export function WorkspaceProvider({ ctx, children }: { ctx: AnalyticsContext; ch
   // Live: the drawer is expanded on dashboards and auto-collapses to the 65px rail on the Portfolio (summary) page.
   const [collapsed, setCollapsed] = useState(isRailPage(page));
 
-  const reloadPortfolios = useCallback(async () => { setPortfolios(await analyticsApi.portfolios(ctx.familyId)); }, [ctx.familyId]);
+  const reloadPortfolios = useCallback(async () => {
+    setPortfolios(isRealId(ctx.familyId) ? await analyticsApi.portfolios(ctx.familyId) : []);
+  }, [ctx.familyId]);
 
-  useEffect(() => { void analyticsApi.families(ctx.dbId).then(setFamilies); }, [ctx.dbId]);
+  useEffect(() => { if (isRealId(ctx.dbId)) void analyticsApi.families(ctx.dbId).then(setFamilies); else setFamilies([]); }, [ctx.dbId]);
   useEffect(() => { void reloadPortfolios(); }, [reloadPortfolios]);
-  useEffect(() => { setSummary(null); void analyticsApi.summary(ctx.portfolioId).then(setSummary); }, [ctx.portfolioId]);
+  useEffect(() => {
+    setSummary(null);
+    if (isRealId(ctx.portfolioId)) void analyticsApi.summary(ctx.portfolioId).then(setSummary);
+  }, [ctx.portfolioId]);
   useEffect(() => { void analyticsApi.preferences().then(setPreferences); }, []);
   useEffect(() => {
     const load = () => void analyticsApi.indices().then(setIndices).catch(() => undefined);

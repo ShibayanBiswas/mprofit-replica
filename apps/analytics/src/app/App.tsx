@@ -6,7 +6,7 @@ import { SessionProvider, useSession } from '../state/SessionContext';
 import { OverlayProvider } from '../state/OverlayContext';
 import { WorkspaceProvider, useWorkspace } from '../state/WorkspaceContext';
 import { Shell } from '../components/shell/Shell';
-import { CLASSIC_LOGIN, isPage, pagePath } from './routes';
+import { CLASSIC_LOGIN, isPage, isRealId, pagePath } from './routes';
 import { TodayPage } from '../pages/TodayPage';
 import { HoldingsPage } from '../pages/HoldingsPage';
 import { PerformancePage } from '../pages/PerformancePage';
@@ -44,7 +44,7 @@ function ResolveContext() {
       if (!db) { setError('No database available for this account.'); return; }
       const families = await analyticsApi.families(db.id);
       const fam = families[0];
-      if (!fam) { setError('No families found.'); return; }
+      if (!fam) { setError('empty'); return; }
       const ports = await analyticsApi.portfolios(fam.id);
       const first = ports.find((p) => p.isGroup) ?? ports[0];
       if (!first) { setError('No portfolios found.'); return; }
@@ -53,14 +53,19 @@ function ResolveContext() {
     return () => { cancelled = true; };
   }, [databases, fromToken]);
 
-  if (fromToken) {
+  const opened = (fromToken && isRealId(fromToken.familyId) && isRealId(fromToken.portfolioId))
+    ? fromToken
+    : (fromToken && !isRealId(fromToken.familyId))
+      ? { dbId: fromToken.dbId, familyId: '-', portfolioId: '-' }
+      : (error === 'empty' && databases[0] ? { dbId: databases[0].id, familyId: '-', portfolioId: '-' } : null);
+  if (opened) {
     return (
-      <WorkspaceProvider ctx={fromToken}>
+      <WorkspaceProvider ctx={opened}>
         <Shell><PageSwitch /></Shell>
       </WorkspaceProvider>
     );
   }
-  if (error) return <div className="an-boot an-boot-error">{error}</div>;
+  if (error && error !== 'empty') return <div className="an-boot an-boot-error">{error}</div>;
   if (!fallback) return <div className="an-boot" />;
   return <Navigate to={pagePath(isPage(params.page) ? params.page : 'today', fallback)} replace />;
 }

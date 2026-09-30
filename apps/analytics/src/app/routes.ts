@@ -20,6 +20,8 @@ export const pagePath = (page: AnalyticsPage, ctx: AnalyticsContext, sub?: strin
 export const classicPath = (ctx: AnalyticsContext) => `${CLASSIC_URL}/app/db/${ctx.dbId}/f/${ctx.familyId}/pms/${ctx.portfolioId}/sum`;
 export const CLASSIC_LOGIN = `${CLASSIC_URL}/login`;
 
+export const isRealId = (id: string | undefined | null) => !!id && id !== '-';
+
 export function isPage(s: string | undefined): s is AnalyticsPage {
   return !!s && (PAGES as string[]).includes(s);
 }

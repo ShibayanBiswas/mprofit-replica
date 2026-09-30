@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fmtAmount, fmtDate } from '@mprofit/shared';
 import type { EquityExposure, EquityExposureRow } from '@mprofit/shared';
 import { analyticsApi } from '../api/analyticsApi';
+import { isRealId } from '../app/routes';
 import { useWorkspace } from '../state/WorkspaceContext';
 import { Card, DataTable, EmptyState, Menu, SearchField, ToggleGroup, useSort } from '../components/ui/Primitives';
 import { ArrowLeftIcon, DownloadIcon } from '../components/ui/Icons';
@@ -17,7 +18,7 @@ export function EquityExposurePage() {
   const [viewBy, setViewBy] = useState<ViewBy>('Stock');
   const [q, setQ] = useState('');
 
-  useEffect(() => { setData(null); void analyticsApi.equityExposure(ctx.portfolioId).then(setData); }, [ctx.portfolioId]);
+  useEffect(() => { setData(null); if (isRealId(ctx.portfolioId)) void analyticsApi.equityExposure(ctx.portfolioId).then(setData); }, [ctx.portfolioId]);
 
   const rows: EquityExposureRow[] = useMemo(() => {
     const src = viewBy === 'Stock' ? data?.byStock : viewBy === 'Sector' ? data?.bySector : data?.byMarketCap;

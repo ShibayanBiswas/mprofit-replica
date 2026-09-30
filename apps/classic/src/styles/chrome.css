@@ -10,7 +10,6 @@
 .topnav-item .caret { margin-left: 5px; }
 .topnav-item.has-badge { padding-right: 0; }
 .topnav-new-badge { position: absolute; right: -14px; top: -4px; width: 22px; height: 16px; pointer-events: none; }
-.topnav-gift svg, .topnav-gift i { font-size: 19px; }
 .topnav-user { height: 40px; padding: 0 20px 0 10px; margin-right: 0; }
 .topnav-user .fa-user-circle, .topnav-user .fa-user { font-size: 19px; margin-right: 8px; }
 .topnav .dd-menu { top: 32px; }
@@ -142,8 +141,8 @@
 .referral-container .material-icons { font-size: 22px; color: var(--navy); margin-right: 12px; }
 .referral-text { font-size: 16px; font-weight: 600; color: var(--navy); }
 
-.middle-container { flex: 1; min-width: 0; margin-top: 8px; padding: 0 20px; display: flex; flex-direction: column; min-height: 0; }
-.middle-container-inner { flex: 1; min-height: 0; border: 1px solid var(--panel-border); border-bottom: 0; border-radius: 5px 5px 0 0; display: flex; flex-direction: column; overflow: hidden; }
+.middle-container { flex: 1; min-width: 0; margin-top: 8px; padding: 0 20px; display: flex; flex-direction: column; min-height: 0; overflow-x: auto; }
+.middle-container-inner { flex: 1; min-height: 0; min-width: 1040px; border: 1px solid var(--panel-border); border-bottom: 0; border-radius: 5px 5px 0 0; display: flex; flex-direction: column; overflow: hidden; }
 
 /* ---- Asset nav strip ---- */
 .asset-nav-container { height: 38px; flex: none; background: var(--navy); padding-bottom: 1px; border-radius: 3px 3px 0 0; display: flex; }
@@ -179,7 +178,7 @@
 .stocks-group > .sum-table, .stock-total .sum-table { padding-right: 0; }
 .stock-heading { height: 50px; border-bottom: 1px solid var(--header-border); }
 .stock-heading td { text-align: right; vertical-align: middle; padding: 0 7px 0 0; }
-.stock-heading td p { color: #000; font-weight: 600; font-size: 15px; line-height: 21.4286px; cursor: pointer; }
+.stock-heading td p { color: #000; font-weight: 600; font-size: 15px; line-height: 21.4286px; cursor: pointer; white-space: nowrap; }
 .stock-heading td p.text-blue { color: var(--blue-link); font-size: 13px; line-height: 18.5714px; }
 .stock-heading td.col-dropdown { text-align: center; padding: 0; color: #000; }
 .stock-heading td.col-dropdown svg, .stock-heading td.col-dropdown i { font-size: 16px; }
@@ -201,7 +200,7 @@
 .stock-row:hover td.col-dropdown .caret { display: inline-block; }
 .stock-row td p.s-margin { font-size: 13px; line-height: 18.5714px; }
 .gain-pos { color: var(--green); } .gain-neg { color: var(--red); }
-.stock-total { height: 50px; flex: none; background: var(--footer); font-size: 15px; line-height: 21.4286px; font-weight: 600; box-shadow: 0 2px 7px 2px #000; position: relative; z-index: 2; }
+.stock-total { height: 50px; flex: none; background: var(--footer); font-size: 15px; line-height: 21.4286px; font-weight: 600; box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.12); position: relative; z-index: 2; }
 .stock-total table { margin: 0; }
 .stock-total td { text-align: right; vertical-align: middle; padding: 0 7px 0 0; font-size: 15px; }
 .stock-total td.col-first { text-align: left; padding: 0; }
@@ -228,7 +227,6 @@
 .vat-export { margin-left: auto; height: 32px; }
 .vat-summary { background: var(--footer); color: var(--navy); font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 3px 3px 0 0; }
 .vat-table th { color: var(--navy); font-size: 14px; font-weight: 600; }
-.family-dd .dd-menu { top: -12px; left: -15px; min-height: 440px; }
 .famtab-table tbody td { padding: 10px 15px; }
 
 @media (max-width: 1100px) {

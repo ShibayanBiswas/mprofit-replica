@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fmtAmount, fmtDate, fmtRupee, fmtSigned, fmtSignedPct } from '@mprofit/shared';
 import type { AssetAllocation, CorporateAction, Movers, WatchlistItem } from '@mprofit/shared';
 import { analyticsApi } from '../api/analyticsApi';
+import { isRealId } from '../app/routes';
 import { useWorkspace } from '../state/WorkspaceContext';
 import { useOverlay } from '../state/OverlayContext';
 import { DashboardTabs, ReportStudioButton } from '../components/shell/Shell';
@@ -20,6 +21,7 @@ export function TodayPage() {
 
   useEffect(() => {
     setAlloc(null); setMovers(null);
+    if (!isRealId(ctx.portfolioId)) return;
     void analyticsApi.assetAllocation(ctx.portfolioId).then(setAlloc);
     void analyticsApi.movers(ctx.portfolioId).then(setMovers);
     void analyticsApi.corporateActions(ctx.portfolioId).then(setActions);

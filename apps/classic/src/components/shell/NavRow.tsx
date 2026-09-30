@@ -27,7 +27,7 @@ function Toolbar({ onAssetSearch }: { onAssetSearch: (q: string) => void }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState('');
 
-  const go = (page: AnalyticsPage) => { if (family && portfolio) window.location.assign(analyticsPath(dbId, family.id, portfolio.id, page)); };
+  const go = (page: AnalyticsPage) => { window.location.assign(analyticsPath(dbId, family?.id || '-', portfolio?.id || '-', page)); };
 
   const xirrEntries: MenuEntry[] = [
     { type: 'item', label: 'Portfolio XIRR (without zero holdings)', onSelect: () => open({ kind: 'xirr', withZero: false }) },

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fmtAmount, fmtDate, fmtRupee } from '@mprofit/shared';
 import type { AssetAllocation, AssetAllocationRow } from '@mprofit/shared';
 import { analyticsApi } from '../api/analyticsApi';
+import { isRealId } from '../app/routes';
 import { useWorkspace, type ViewBy } from '../state/WorkspaceContext';
 import { DashboardTabs } from '../components/shell/Shell';
 import { Card, DataTable, EmptyState, GainPill, Menu, SearchField, SelectButton, ToggleGroup, useSort } from '../components/ui/Primitives';
@@ -17,7 +18,7 @@ export function HoldingsPage() {
   const [basis, setBasis] = useState<Basis>('Current Value');
   const [q, setQ] = useState('');
 
-  useEffect(() => { setAlloc(null); void analyticsApi.assetAllocation(ctx.portfolioId).then(setAlloc); }, [ctx.portfolioId]);
+  useEffect(() => { setAlloc(null); if (isRealId(ctx.portfolioId)) void analyticsApi.assetAllocation(ctx.portfolioId).then(setAlloc); }, [ctx.portfolioId]);
 
   // "View by Category" folds asset classes into their category (mirrors the mock API's categoryOf map through labels).
   const rows: AssetAllocationRow[] = useMemo(() => {

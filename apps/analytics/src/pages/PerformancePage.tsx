@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { fmtAmount, fmtDate, fmtDateTime, fmtPct, fmtRupee } from '@mprofit/shared';
 import type { PerformanceBreakdown, PerformanceRow, PerformanceSnapshot } from '@mprofit/shared';
 import { analyticsApi, type BenchmarksResponse } from '../api/analyticsApi';
+import { isRealId } from '../app/routes';
 import { useWorkspace } from '../state/WorkspaceContext';
 import { useOverlay, type Period } from '../state/OverlayContext';
 import { DashboardTabs } from '../components/shell/Shell';
@@ -25,10 +26,10 @@ export function PerformancePage() {
 
   useEffect(() => {
     setSnap(null); setBreakdown(null); setRevealed({ compare: false, category: false, assetClass: false, advanced: false });
-    void analyticsApi.performance(ctx.portfolioId).then(setSnap);
+    if (isRealId(ctx.portfolioId)) void analyticsApi.performance(ctx.portfolioId).then(setSnap);
   }, [ctx.portfolioId]);
   useEffect(() => { void analyticsApi.benchmarks().then(setBench); }, []);
-  const loadBreakdown = () => { void analyticsApi.performanceBreakdown(ctx.portfolioId).then((b) => { setBreakdown(b); setRefreshedAt(new Date().toISOString()); }); };
+  const loadBreakdown = () => { if (!isRealId(ctx.portfolioId)) return; void analyticsApi.performanceBreakdown(ctx.portfolioId).then((b) => { setBreakdown(b); setRefreshedAt(new Date().toISOString()); }); };
   const reveal = (k: keyof typeof revealed) => { setRevealed((r) => ({ ...r, [k]: true })); if ((k === 'category' || k === 'assetClass') && !breakdown) loadBreakdown(); };
 
   const selectedBench = bench?.benchmarks.find((b) => b.code === bench.selected) ?? null;

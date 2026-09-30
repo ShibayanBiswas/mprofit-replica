@@ -6,8 +6,7 @@ import { useSession } from '../../state/SessionContext';
 import { useWorkspace } from '../../state/WorkspaceContext';
 import { analyticsPath, LOGIN_PATH } from '../../app/routes';
 
-// Top navigation (40px navy band). Order and labels match the live shell:
-// API ▾ | Import | Analytics [NEW] | Tools ▾ | Help | 🎁 | 👤 Display name ▾
+// Top navigation (40px navy band). Order: API ▾ | Import | Analytics [NEW] | Tools ▾ | Help | 👤 Display name ▾
 export function TopNav() {
   const { open } = useOverlay();
   const { user, logout } = useSession();
@@ -49,8 +48,7 @@ export function TopNav() {
   ];
 
   const goAnalytics = () => {
-    if (!family || !portfolio) return;
-    window.location.assign(analyticsPath(dbId, family.id, portfolio.id, 'today'));
+    window.location.assign(analyticsPath(dbId, family?.id || '-', portfolio?.id || '-', 'today'));
   };
 
   return (
@@ -65,7 +63,6 @@ export function TopNav() {
         </button>
         <Dropdown className="topnav-dd" menuClassName="tools-menu" trigger={() => <button type="button" className="topnav-item">Tools<Caret /></button>} entries={toolsEntries} />
         <button type="button" className="topnav-item" onClick={() => open({ kind: 'help' })}>Help</button>
-        <button type="button" className="topnav-item topnav-gift" aria-label="What's new" onClick={() => open({ kind: 'whatsNew' })}><i className="fas fa-gift" /></button>
         <Dropdown className="topnav-dd" align="right" menuClassName="user-menu" trigger={() => (
           <button type="button" className="topnav-item topnav-user"><i className="fas fa-user" />{user?.displayName ?? ''}<Caret /></button>
         )} entries={userEntries} />
