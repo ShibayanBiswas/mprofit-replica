@@ -5,7 +5,7 @@ import { classicApi } from '../api/classicApi';
 import { GhostButton, Modal, PrimaryButton } from '../components/Modal';
 import { useWorkspace } from '../state/WorkspaceContext';
 
-type Variant = 'Portfolio' | 'Group' | 'Entity' | 'Strategy/Goal Portfolio' | 'International Portfolio' | 'Account Portfolio for Tally Integration';
+type Variant = 'Portfolio' | 'Group' | 'Entity' | 'Strategy/Goal Portfolio' | 'International Portfolio' | 'Account Portfolio for Tally Integration' | 'F&O';
 
 // + Add → Add Portfolio / Group / Entity / ... (one form, variant drives the title and defaults)
 export function AddPortfolioModal({ variant, onClose }: { variant: Variant; onClose: () => void }) {
@@ -17,8 +17,13 @@ export function AddPortfolioModal({ variant, onClose }: { variant: Variant; onCl
   const [pms, setPms] = useState(variant === 'Strategy/Goal Portfolio');
   const [more, setMore] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
+  const [pincode, setPincode] = useState('');
   const isGroup = variant === 'Group';
-  const type: PortfolioType = variant === 'International Portfolio' ? 'International' : 'Investment';
+  const isFo = variant === 'F&O';
+  const type: PortfolioType = isFo ? 'F&O' : variant === 'International Portfolio' ? 'International' : 'Investment';
 
   const save = async () => {
     if (!family || !shortName.trim()) return;
@@ -31,13 +36,21 @@ export function AddPortfolioModal({ variant, onClose }: { variant: Variant; onCl
   };
 
   return (
-    <Modal title={`Add ${variant}`} onClose={onClose} size="md">
+    <Modal title={isFo ? 'Add F&O Portfolio' : `Add ${variant}`} onClose={onClose} size="md">
       <div className="form-row"><span className="form-label">{isGroup ? 'Group Name' : 'Portfolio Name'} <span style={{ color: 'var(--red)' }}>*</span></span><input className="form-control" autoFocus value={shortName} onChange={(e) => setShortName(e.target.value)} /></div>
       {!isGroup && <div className="form-row"><span className="form-label">Full Name</span><input className="form-control" value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>}
+      {isFo && (
+        <>
+          <div className="form-row"><span className="form-label">Address</span><input className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} /></div>
+          <div className="form-row"><span className="form-label">City</span><input className="form-control" value={city} onChange={(e) => setCity(e.target.value)} /></div>
+          <div className="form-row"><span className="form-label">Country</span><input className="form-control" value={country} onChange={(e) => setCountry(e.target.value)} /></div>
+          <div className="form-row"><span className="form-label">Pincode</span><input className="form-control" value={pincode} onChange={(e) => setPincode(e.target.value)} /></div>
+        </>
+      )}
       {!isGroup && <div className="form-row"><span className="form-label">PAN</span><input className="form-control" value={pan} onChange={(e) => setPan(e.target.value.toUpperCase())} maxLength={10} /></div>}
-      {!isGroup && <div className="form-row"><span className="form-label">Trading Portfolio</span><label className="checkbox"><input type="checkbox" checked={trading} onChange={(e) => setTrading(e.target.checked)} /></label></div>}
-      {!isGroup && <div className="form-row"><span className="form-label">PMS Portfolio</span><label className="checkbox"><input type="checkbox" checked={pms} onChange={(e) => setPms(e.target.checked)} /></label></div>}
-      {!isGroup && <div className="form-row" style={{ minHeight: 30 }}><span className="tool-link" style={{ fontSize: 14 }} onClick={() => setMore((m) => !m)}><span className="btn-add-icon" style={{ width: 16, height: 16, fontSize: 14, lineHeight: '16px' }}>+</span>Additional Options</span></div>}
+      {!isGroup && !isFo && <div className="form-row"><span className="form-label">Trading Portfolio</span><label className="checkbox"><input type="checkbox" checked={trading} onChange={(e) => setTrading(e.target.checked)} /></label></div>}
+      {!isGroup && !isFo && <div className="form-row"><span className="form-label">PMS Portfolio</span><label className="checkbox"><input type="checkbox" checked={pms} onChange={(e) => setPms(e.target.checked)} /></label></div>}
+      {!isGroup && !isFo && <div className="form-row" style={{ minHeight: 30 }}><span className="tool-link" style={{ fontSize: 14 }} onClick={() => setMore((m) => !m)}><span className="btn-add-icon" style={{ width: 16, height: 16, fontSize: 14, lineHeight: '16px' }}>+</span>Additional Options</span></div>}
       {more && (
         <>
           <div className="form-row"><span className="form-label">Linked PMS</span><select className="form-control form-select"><option>None</option></select></div>

@@ -21,7 +21,7 @@ export type OverlayKind =
   | { kind: 'import' }
   | { kind: 'importWizard'; step?: 'Stocks' | 'Mutual Funds' | 'Banks' | 'F&O' | 'Others' }
   | { kind: 'addTransaction'; guided?: boolean }
-  | { kind: 'addPortfolio'; variant: 'Portfolio' | 'Group' | 'Entity' | 'Strategy/Goal Portfolio' | 'International Portfolio' | 'Account Portfolio for Tally Integration' }
+  | { kind: 'addPortfolio'; variant: 'Portfolio' | 'Group' | 'Entity' | 'Strategy/Goal Portfolio' | 'International Portfolio' | 'Account Portfolio for Tally Integration' | 'F&O' }
   | { kind: 'addToStrategies' }
   | { kind: 'addFamily' }
   | { kind: 'editFamily' }

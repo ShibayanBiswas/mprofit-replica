@@ -64,7 +64,10 @@ export function TopNav() {
         <Dropdown className="topnav-dd" menuClassName="tools-menu" trigger={() => <button type="button" className="topnav-item">Tools<Caret /></button>} entries={toolsEntries} />
         <button type="button" className="topnav-item" onClick={() => open({ kind: 'help' })}>Help</button>
         <Dropdown className="topnav-dd" align="right" menuClassName="user-menu" trigger={() => (
-          <button type="button" className="topnav-item topnav-user"><i className="fas fa-user" />{user?.displayName ?? ''}<Caret /></button>
+          <button type="button" className="topnav-item topnav-user">
+            <svg className="topnav-user-icon" viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M96 160C96 71.634 167.635 0 256 0s160 71.634 160 160-71.635 160-160 160S96 248.366 96 160zm304 192h-28.556c-71.006 42.713-159.912 42.695-230.888 0H112C50.144 352 0 402.144 0 464v24c0 13.255 10.745 24 24 24h464c13.255 0 24-10.745 24-24v-24c0-61.856-50.144-112-112-112z" /></svg>
+            {user?.displayName ?? ''}<Caret />
+          </button>
         )} entries={userEntries} />
       </nav>
     </header>

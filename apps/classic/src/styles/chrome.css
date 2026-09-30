@@ -11,7 +11,8 @@
 .topnav-item.has-badge { padding-right: 0; }
 .topnav-new-badge { position: absolute; right: -14px; top: -4px; width: 22px; height: 16px; pointer-events: none; }
 .topnav-user { height: 40px; padding: 0 20px 0 10px; margin-right: 0; }
-.topnav-user .fa-user-circle, .topnav-user .fa-user { font-size: 19px; margin-right: 8px; }
+.topnav-user-icon { width: 18.66px; height: 18.66px; margin-right: 5px; display: block; flex: none; }
+.topnav-user .caret { margin-left: 2px; }
 .topnav .dd-menu { top: 32px; }
 .topnav .dd-menu.user-menu { top: 42px; width: 166px; }
 .topnav .dd-menu.api-menu { width: 160px; }
@@ -20,14 +21,15 @@
 /* Dropdown menus (Bootstrap 3 look) */
 .dd { position: relative; display: inline-block; }
 .dd-trigger { display: inline-flex; align-items: center; height: 100%; }
-.dd-menu { position: absolute; z-index: 1000; min-width: 160px; background: #fff; border: 0; border-radius: 0; box-shadow: 0 6px 32px -9px rgba(0,0,0,0.36); padding: 10px 0; text-align: left; font-size: 14px; }
+.dd-menu { position: absolute; z-index: 1000; min-width: 160px; background: #fff; border: 1px solid #f2f2f2; border-radius: 0; box-shadow: 0 6px 32px -9px rgba(0,0,0,0.36); padding: 10px 0; text-align: left; font-size: 14px; font-weight: 400; color: #333; }
 .dd-left { left: 0; }
 .dd-right { right: 0; }
-.dd-menu li > a { display: flex; align-items: center; justify-content: space-between; height: 30px; padding: 0 17px 0 18px; color: var(--navy-text); font-size: 13px; font-weight: 400; white-space: nowrap; line-height: 20px; }
+.dd-menu li > a { display: flex; align-items: center; justify-content: space-between; min-height: 30px; height: auto; padding: 5px 20px; color: #333; font-size: 14px; font-weight: 400; letter-spacing: normal; white-space: nowrap; line-height: 20px; }
 .dd-menu li > a:hover { background: #f5f5f5; text-decoration: none; }
-.dd-menu li.no-hover > a, .dd-static { color: var(--navy-text); font-size: 13px; padding: 0 18px; height: 30px; line-height: 30px; cursor: default; white-space: nowrap; }
+.dd-menu li.no-hover > a, .dd-static { color: #333; font-size: 14px; font-weight: 400; padding: 5px 20px; min-height: 30px; height: auto; line-height: 20px; cursor: default; white-space: nowrap; }
 .dd-menu li.no-hover > a:hover { background: transparent; }
-.dd-divider { height: 1px; margin: 9px 0; background: var(--menu-divider); }
+.dd-divider { height: 1px; margin: 9px 20px; background: #e5e5e5; }
+.api-menu li > a { font-size: 18px; line-height: 25.7143px; padding: 10px 20px; min-height: 50px; }
 .dd-menu img.broker-mini { width: 20px; height: auto; }
 
 /* ---- Family bar ---- */
@@ -36,7 +38,7 @@
 .family-bar { height: 56px; flex: none; background: var(--family-bar); border-bottom: 1px solid var(--panel-border); display: flex; align-items: center; padding: 0 20px 0 5px; position: relative; z-index: 250; }
 .family-btn { display: inline-flex; align-items: center; height: 50px; background: transparent; border: 0; padding: 5px 6px 5px 17px; font-size: 20px; line-height: 40px; font-weight: 600; color: var(--navy-text); font-family: var(--font); }
 .family-btn .caret { border-top-width: 7px; border-right-width: 7px; border-left-width: 7px; margin-left: 7px; color: var(--navy-text); }
-.family-dd .dd-menu { left: -10px; top: 40px; width: 350px; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 260; }
+.family-dd .dd-menu { left: -10px; top: 40px; width: 350px; border: 0; border-radius: 0 3px 3px 3px; box-shadow: 0 1px 6px 5px rgba(0,0,0,0.2); padding: 0 0 15px; z-index: 260; }
 .family-dd .dd-menu.dd-left { left: -10px; }
 .fam-edit-row { display: flex; align-items: center; height: 40px; padding: 0 15px; gap: 15px; }
 .fam-edit-btn { font-weight: 400; color: var(--navy); cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; }
@@ -95,12 +97,10 @@
 .btn-add-icon { background: var(--navy-2); color: #fff; width: 20px; height: 20px; border-radius: 20px; font-size: 20px; line-height: 20px; text-align: center; display: inline-block; margin-right: 5px; }
 .analytics-cta-btn { background: var(--analytics-tile); border: 0; border-radius: 4px; padding: 5px; margin-left: 12px; line-height: 0; }
 .analytics-cta-btn img { width: 20px; height: 20px; display: block; }
-.toolbar .dd-menu { top: 22px; min-width: 170px; border-radius: 4px; padding: 10px 0; }
-.toolbar .dd-menu li > a { height: 24px; font-size: 12px; font-weight: 600; letter-spacing: -0.35px; padding: 0 17px; }
-.toolbar .dd-menu .dd-divider { margin: 8px 0; }
+.toolbar .dd-menu { top: 22px; }
 .toolbar-asset-search { position: relative; margin-left: 12px; }
 .toolbar-asset-search input { width: 220px; height: 26px; border: 1px solid #add1de; border-radius: 4px; padding: 0 10px; font-size: 13px; outline: none; }
-.analytics-preview-menu { display: flex; align-items: flex-start; padding: 9px; margin-top: 4px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.24); min-width: 0; }
+.analytics-preview-menu { display: flex; align-items: flex-start; padding: 9px; margin-top: 4px; border: 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.24); min-width: 0; }
 .analytics-preview-card { display: flex; flex-direction: column; align-items: center; width: 128px; cursor: pointer; }
 .analytics-preview-card .preview-img { width: 128px; height: 80px; border-radius: 4px; background: #eef4ea; display: flex; align-items: center; justify-content: center; color: var(--navy); }
 .analytics-preview-card:hover .preview-img { box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
@@ -123,8 +123,7 @@
 .btn-port-filters { padding: 1px 10px; color: var(--navy); background: transparent; border: 0; font-size: 14px; display: inline-flex; align-items: center; }
 .active-port-filter-text { font-size: 16px; line-height: 22.8571px; font-weight: 600; color: var(--navy); margin-right: 10px; }
 .btn-port-filters .caret { margin-left: 2px; }
-.btn-port-filters-container .dd-menu { min-width: 128px; top: 26px; border-radius: 4px; padding: 6px 0; }
-.btn-port-filters-container .dd-menu li > a { height: 24px; font-size: 12px; padding: 0 12px; color: var(--navy); }
+.btn-port-filters-container .dd-menu { min-width: 160px; top: 26px; }
 .client-left-tab { padding: 10px 0 0; margin: 0 0 0 20px; overflow-y: auto; flex: 1; min-height: 0; }
 .client-left-tab::-webkit-scrollbar { width: 0; }
 .tab-c { width: 145px; height: 40px; padding: 0 10px; margin-bottom: 8px; background: var(--sidebar-item); box-shadow: 0 0 7px #d3d3d3; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }

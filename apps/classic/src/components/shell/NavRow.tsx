@@ -6,17 +6,24 @@ import { analyticsPath, type AnalyticsPage } from '../../app/routes';
 
 // Nav row (41px): left = sidebar toggle + INV | F&O pills (185px); right = portfolio toolbar.
 export function NavRow({ onAssetSearch }: { onAssetSearch: (q: string) => void }) {
-  const { mode, setMode, toggleSidebar } = useWorkspace();
+  const { mode, setMode, toggleSidebar, portfolios } = useWorkspace();
+  const { open } = useOverlay();
+  const enterFo = () => {
+    if (mode === 'FO') return;
+    setMode('FO');
+    // Live opens Add F&O Portfolio immediately when the family has no F&O book yet.
+    if (!portfolios.some((p) => p.type === 'F&O')) open({ kind: 'addPortfolio', variant: 'F&O' });
+  };
   return (
     <div className="nav-row">
       <div className="nav-row-left">
         <span className="sidebar-toggle" onClick={toggleSidebar} role="button" aria-label="Toggle sidebar"><i className="fas fa-chevron-left" /></span>
         <ul className="cloud-tabs">
           <li className={mode === 'INV' ? 'active' : ''} onClick={() => setMode('INV')}><a>INV</a></li>
-          <li className={mode === 'FO' ? 'active' : ''} onClick={() => setMode('FO')}><a>F&amp;O</a></li>
+          <li className={mode === 'FO' ? 'active' : ''} onClick={enterFo}><a>F&amp;O</a></li>
         </ul>
       </div>
-      {mode === 'INV' ? <Toolbar onAssetSearch={onAssetSearch} /> : <div className="toolbar" />}
+      <Toolbar onAssetSearch={onAssetSearch} />
     </div>
   );
 }

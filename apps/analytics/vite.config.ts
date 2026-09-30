@@ -7,7 +7,8 @@ export default defineConfig({
     port: 5174,
     strictPort: true,
     proxy: {
-      '/api': { target: 'http://localhost:3001', changeOrigin: false },
+      // 127.0.0.1, not localhost: another local app already owns IPv6 port 3001.
+      '/api': { target: 'http://127.0.0.1:3001', changeOrigin: false },
     },
   },
 });

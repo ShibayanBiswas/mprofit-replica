@@ -7,11 +7,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 const procs = [
-  ['api', ['run', 'dev', '-w', 'apps/mock-api']],
-  ['classic', ['run', 'dev', '-w', 'apps/classic']],
-  ['analytics', ['run', 'dev', '-w', 'apps/analytics']],
-].map(([name, args]) => {
-  const child = spawn(npmCmd, args, { cwd: root, stdio: 'inherit', shell: process.platform === 'win32' });
+  // Demo fixture is the Azeez family used for live side-by-side. A blank tenant is `MPROFIT_SEED` unset.
+  ['api', ['run', 'dev', '-w', 'apps/mock-api'], { MPROFIT_SEED: 'demo' }],
+  ['classic', ['run', 'dev', '-w', 'apps/classic'], {}],
+  ['analytics', ['run', 'dev', '-w', 'apps/analytics'], {}],
+].map(([name, args, extraEnv]) => {
+  const child = spawn(npmCmd, args, { cwd: root, stdio: 'inherit', shell: process.platform === 'win32', env: { ...process.env, ...extraEnv } });
   child.on('exit', (code) => console.log(`[${name}] exited with ${code}`));
   return child;
 });

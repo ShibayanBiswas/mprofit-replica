@@ -51,7 +51,7 @@ export function Sidebar() {
               </div>
             ))}
             {family ? (
-              <button type="button" className="btn-add-port" onClick={() => open({ kind: 'addPortfolio', variant: 'Portfolio' })}>
+              <button type="button" className="btn-add-port" onClick={() => open({ kind: 'addPortfolio', variant: mode === 'FO' ? 'F&O' : 'Portfolio' })}>
                 <span className="btn-add-icon">+</span><span className="add-port-label">Add Portfolio</span>
               </button>
             ) : (
@@ -68,7 +68,7 @@ export function Sidebar() {
               <span className="c-name">{p.shortName}</span>
             </div>
           ))}
-          <button type="button" className="btn-add-port" style={{ margin: '10px 0 30px 0' }} onClick={() => open({ kind: 'addPortfolio', variant: 'Portfolio' })}>
+          <button type="button" className="btn-add-port" style={{ margin: '10px 0 30px 0' }} onClick={() => open({ kind: 'addPortfolio', variant: mode === 'FO' ? 'F&O' : 'Portfolio' })}>
             <span className="btn-add-icon">+</span><span className="add-port-label">Add Portfolio</span>
           </button>
         </div>

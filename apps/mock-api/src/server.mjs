@@ -25,7 +25,7 @@ const state = {
   preferences: { ...preferences },
   advisorProfile: { ...advisorProfile },
   autoTransferCharges: { ...autoTransferCharges },
-  lastAccessed: new Map(), // userId → portfolioId
+  lastAccessed: new Map([['u3', 'd4e9258bd8ba736d']]), // Sahil lands on AFT, matching live last-accessed
   recentPortfolios: new Map(), // userId → portfolioId[]
   transactions: [],
   branding: { logoUrl: null },
