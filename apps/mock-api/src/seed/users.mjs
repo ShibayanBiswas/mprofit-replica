@@ -2,7 +2,7 @@
 export const users = [
   { id: 'u1', email: 'shibayanbiswas@rathi.com', password: 'Shibayan@123', displayName: 'Shibayan Biswas', role: 'Owner' },
   { id: 'u2', email: 'hasyapatel@rathi.com', password: 'Hasya@123', displayName: 'Hasya Patel', role: 'Admin' },
-  { id: 'u3', email: 'sahilshahani@rathi.com', password: 'Sahil@123', displayName: 'Sahil shahani', role: 'Owner' },
+  { id: 'u3', email: 'sahilshahani@rathi.com', password: 'Sahil@123', displayName: 'Sahil Shahani', role: 'Owner' },
   { id: 'u4', email: 'ferozeazeez@rathi.com', password: 'Feroze@123', displayName: 'Feroze Azeez', role: 'User' },
 ];
 

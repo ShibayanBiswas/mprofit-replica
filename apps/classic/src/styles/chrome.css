@@ -98,8 +98,8 @@
 .action-btn .fa-search { font-size: 15px; }
 .action-btn .caret { margin-left: 2px; }
 .btn-add-icon { background: var(--navy-2); color: #fff; width: 20px; height: 20px; border-radius: 20px; font-size: 20px; line-height: 20px; text-align: center; display: inline-block; margin-right: 5px; }
-.analytics-cta-btn { width: 30px; height: 30px; min-width: 30px; background: #cfe3c9; border: 0; border-radius: 4px; padding: 5px; margin-left: 12px; line-height: 0; display: inline-flex; align-items: center; justify-content: center; }
-.analytics-cta-btn img { width: 20px; height: 20px; display: block; }
+.analytics-cta-btn { width: 30px; height: 30px; min-width: 30px; flex: none; overflow: hidden; background: #cfe3c9; border: 0; border-radius: 4px; padding: 5px; margin-left: 12px; line-height: 0; display: inline-flex; align-items: center; justify-content: center; }
+.analytics-cta-btn img { width: 20px; height: 20px; max-width: 20px; max-height: 20px; display: block; object-fit: contain; }
 .toolbar .dd-menu { top: 22px; font-family: "Source Sans Pro", Arial, sans-serif; font-size: 14px; font-weight: 400; color: #333; }
 .toolbar .dd-menu li > a { font-size: 14px; font-weight: 400; color: #333; min-height: 30px; padding: 5px 20px; }
 .toolbar-asset-search { position: relative; margin-left: 12px; }

@@ -33,7 +33,6 @@ export function GlobalReportsSheet({ onClose }: { onClose: () => void }) {
         <div className="rep-list-items">
           {GLOBAL_ITEMS.map((g, i) => <div key={g} className={`reports-list-item ${i === active ? 'active' : ''}`} style={{ fontSize: 18 }} onClick={() => setActive(i)}>{g}</div>)}
         </div>
-        <div className="rep-disclaimer">Reports Disclaimer</div>
       </div>
       <div className="rep-detail">
         <div className="rep-detail-title">{GLOBAL_ITEMS[active]}</div>

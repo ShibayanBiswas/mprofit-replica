@@ -6,13 +6,13 @@ const DB = '54db4e5354537b2e';
 const DEMO = process.env.MPROFIT_SEED === 'demo';
 
 const demoFamilies = [
-  { id: '95d3987b84b6a24e', dbId: DB, name: 'Azeez family' },
+  { id: '95d3987b84b6a24e', dbId: DB, name: 'Azeez Family' },
 ];
 
 const demoPortfolios = [
   { id: 'grp-azeez', familyId: '95d3987b84b6a24e', shortName: 'Family Group', fullName: 'Azeez Family Group', pan: '', type: 'Investment', isGroup: true, isTrading: false, isPms: false },
-  { id: 'd4e9258bd8ba736d', familyId: '95d3987b84b6a24e', shortName: 'AFT', fullName: 'Azeez family trust', pan: 'AAATA1234F', type: 'Investment', isGroup: false, isTrading: false, isPms: false },
-  { id: '7da9e36b35b84725', familyId: '95d3987b84b6a24e', shortName: 'Azeez abdul', fullName: 'Azeez abdul', pan: 'ABCPA1234K', type: 'Investment', isGroup: false, isTrading: false, isPms: false },
+  { id: 'd4e9258bd8ba736d', familyId: '95d3987b84b6a24e', shortName: 'AFT', fullName: 'Azeez Family Trust', pan: 'AAATA1234F', type: 'Investment', isGroup: false, isTrading: false, isPms: false },
+  { id: '7da9e36b35b84725', familyId: '95d3987b84b6a24e', shortName: 'Azeez Abdul', fullName: 'Azeez Abdul', pan: 'ABCPA1234K', type: 'Investment', isGroup: false, isTrading: false, isPms: false },
   { id: 'p-feroze', familyId: '95d3987b84b6a24e', shortName: 'Feroze Azeez', fullName: 'Feroze Azeez', pan: 'ABCPF5678A', type: 'Investment', isGroup: false, isTrading: false, isPms: false },
   { id: 'p-ruksana', familyId: '95d3987b84b6a24e', shortName: 'Ruksana Azeez', fullName: 'Ruksana Azeez', pan: 'ABCPR9012B', type: 'Investment', isGroup: false, isTrading: false, isPms: false },
   { id: 'p-sana', familyId: '95d3987b84b6a24e', shortName: 'Sana Azeez', fullName: 'Sana Azeez', pan: 'ABCPS3456C', type: 'Investment', isGroup: false, isTrading: false, isPms: false },

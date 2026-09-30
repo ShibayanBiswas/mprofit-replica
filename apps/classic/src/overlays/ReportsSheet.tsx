@@ -46,7 +46,6 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
             <div key={c.id} className={`rep-cat ${c.id === cat?.id ? 'active' : ''}`} onClick={() => { setCatId(c.id); setRepId(c.reports[0]?.id ?? ''); }}>{c.name}</div>
           ))}
         </div>
-        <div className="rep-disclaimer">Reports Disclaimer</div>
       </div>
       <div className="rep-list">
         <div className="rep-list-title">{cat?.name ?? ''}</div>
