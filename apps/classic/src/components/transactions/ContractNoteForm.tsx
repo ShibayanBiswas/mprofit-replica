@@ -256,6 +256,7 @@ function formSpec(code: string, label: string, values: Record<string, string>): 
       fields: [
         { k: 'select', label: 'Trans. Type', key: 'type', options: BUY_SELL },
         { k: 'text', label: 'Asset Name', key: 'name' },
+        { k: 'head', label: 'Transaction' },
         { k: 'date', label: 'Date', key: 'date' },
         { k: 'money', label: 'Quantity', key: 'qty' },
         { k: 'money', label: 'Rate', key: 'rate' },
@@ -308,8 +309,9 @@ function formSpec(code: string, label: string, values: Record<string, string>): 
         { k: 'text', label: 'Asset Name', key: 'name' },
         { k: 'money', label: 'Interest Rate', key: 'interest' },
         { k: 'select', label: 'Interest Type', key: 'interestType', options: INTEREST_TYPE },
-        { k: 'select', label: 'Interest Payment', key: 'interestPay', options: INTEREST_PAY },
+        { k: 'select', label: 'Interest Payment', key: 'interestPay', options: ['Quarterly', 'Monthly', 'Half-yearly', 'Yearly'] },
         { k: 'date', label: 'Maturity Date', key: 'maturity' },
+        { k: 'head', label: 'Transaction' },
         { k: 'date', label: 'Date', key: 'date' },
         { k: 'money', label: 'Amount', key: 'rate' },
         { k: 'text', label: 'Narration', key: 'note' },
@@ -382,23 +384,48 @@ function AssetTransactionForm({ assetCode, label, portfolioId, onBack, onSaved }
         </div>
       </div>
       <div className="cn-scroll">
-        <div className="cn-padding" style={{ maxWidth: 720 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 16 }}>{spec.title}</h2>
+        <div className="tx-form">
+          <h2 className="tx-title">{spec.title}</h2>
           {spec.fields.map((field) => {
-            if (field.k === 'head') return <h3 key={field.label} style={{ fontSize: 16, fontWeight: 600, margin: '18px 0 8px' }}>{field.label}</h3>;
-            if (field.k === 'show') return <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span><span className="cn-total-value">{field.value}</span></div>;
-            if (field.k === 'select') {
-              const value = values[field.key] || field.options[0];
+            if (field.k === 'head') return <h3 key={field.label} className="tx-section">{field.label}</h3>;
+            if (field.k === 'show') {
               return (
-                <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span>
-                  <select className="form-date-dropdown" style={{ width: 220 }} value={value} onChange={(e) => set(field.key, e.target.value)}>{field.options.map((o) => <option key={o}>{o}</option>)}</select>
+                <div key={field.label} className="if-item-container">
+                  <span className="if-item-lbl">{field.label}</span>
+                  <div className="if-input-container"><span className="tx-value">{field.value}</span></div>
                 </div>
               );
             }
-            if (field.k === 'date') return <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span><input className="form-date-dropdown" style={{ width: 210 }} type="date" value={values[field.key] || ''} onChange={(e) => set(field.key, e.target.value)} /></div>;
+            if (field.k === 'select') {
+              const value = values[field.key] || field.options[0];
+              return (
+                <div key={field.label} className="if-item-container">
+                  <span className="if-item-lbl">{field.label}</span>
+                  <div className="if-input-container">
+                    <select className="ng-select-control" value={value} onChange={(e) => set(field.key, e.target.value)}>{field.options.map((o) => <option key={o}>{o}</option>)}</select>
+                  </div>
+                </div>
+              );
+            }
+            if (field.k === 'date') {
+              return (
+                <div key={field.label} className="if-item-container">
+                  <span className="if-item-lbl">{field.label}</span>
+                  <div className="if-input-container">
+                    <input className="ng-select-control" placeholder="dd-mm-yyyy" value={values[field.key] || ''} onChange={(e) => set(field.key, e.target.value)} />
+                  </div>
+                </div>
+              );
+            }
             return (
-              <div key={field.label} className="cn-item-container"><span className="cn-item-lbl">{field.label}</span>
-                <input className={`mpr-input ${field.k === 'money' ? 'right' : ''}`} style={{ width: field.k === 'text' && field.key === 'name' ? 325 : 180 }} value={values[field.key] ?? (field.k === 'money' ? '0.00' : '')} onChange={(e) => set(field.key, e.target.value)} />
+              <div key={field.label} className="if-item-container">
+                <span className="if-item-lbl">{field.label}</span>
+                <div className="if-input-container tx-with-add">
+                  {field.key === 'note'
+                    ? <textarea className="ng-select-control tx-note" value={values.note || ''} onChange={(e) => set('note', e.target.value)} />
+                    : <input className={`ng-select-control ${field.k === 'money' ? 'right' : ''}`} value={values[field.key] ?? (field.k === 'money' ? '0.00' : '')} onChange={(e) => set(field.key, e.target.value)} />}
+                  {field.key === 'name' && <button type="button" className="tx-add" aria-label="Add asset"><i className="material-icons">add_circle_outline</i></button>}
+                </div>
               </div>
             );
           })}

@@ -84,10 +84,10 @@ export function ReportsSheet({ initialCategoryId, initialReportId, onClose }: Pr
                 <img className="rep-preview-img rep-preview-img-open" src={rep.preview} alt={`${rep.name} sample`} />
               </div>
             ) : (
-              <>
-                <img className="rep-preview-img" src={rep.preview} alt={`${rep.name} sample`} />
+              <div className="rep-preview-frame">
+                <img className="rep-preview-img" src={rep.preview} alt="" />
                 <button type="button" className="rep-preview-btn" onClick={() => setSampleOpen(true)}>View Sample Report</button>
-              </>
+              </div>
             )}
           </div>
         )}
